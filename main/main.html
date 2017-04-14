@@ -10,155 +10,179 @@
 		<link rel="stylesheet" href="../fonts/iconfont.css">
 		<link rel="stylesheet" href="../css/app.css">
 		<style type="text/css">
-			/*底部*/
-			.wb-footer{
-				height: 54px;
-				border-top: 1px solid #eee;
-				font-size: 10px;
-			}
-			.nav-tab{
+			/*顶部*/
+			.head-warp{
 				position: relative;
-				color: #888;
+				height: 130px;
+				border-bottom: 1px solid #eee;
 			}
-			.nav-tab img{
-				width: 24px;
-				height: 24px;
-				margin: 8px 0 3px 0;
+			.head-warp .usericon{
+				width: 72px;
+				height: 72px;
+				margin: 20px 0 0 16px;
 			}
-			.nav-tab.tab-active{
-				color: #19B5FF;
-			}
-			/*小红点*/
-			.msg-dot{
-				display: none;
+			.head-warp .account{
 				position: absolute;
-				top: 8px;
-				left: 50%;
-				margin-left: 8px;
+				top: 24px;
+				left: 105px;
+			}
+			.head-warp .recharge{
+				font-size: 12px;
+				margin-left: 12px;
+				padding: 6px 16px;
+				background-color: #FE2D66;
+				border-radius: 3px;
+				color: white;
+			}
+			.head-warp .vipinfo{
+				position: absolute;
+				left: 105px;
+				top: 70px;
+				font-size: 14px;
+			}
+			.head-warp .vipinfo .vipcomment{
+				margin-left: 10px;
+			}
+			.head-warp .username{
+				font-size: 14px;
+				margin-top: 10px;
+				width: 110px;
+				text-align: center;
+			}
+			.head-warp .icon-xiangji{
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 40px;
+				height: 50px;
+				line-height: 50px;
+				font-size: 24px;
+				text-align: center;
+				color: #666;
+			}
+			.head-warp .icon-lanya{
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				width: 40px;
+				height: 40px;
+				line-height: 40px;
+				font-size: 24px;
+				text-align: center;
+				color: gray;
+			}
+			/*业务列表*/
+			.bizlist{
+				text-align: center;
+			}
+			.bizlist li{
+				float: left;
+				display: inline-block;
+				width: 28%;
+				font-size: 14px;
+				margin:30px 0 0 4%;
+				padding: 25px 0;
+				white-space: nowrap;
+				border-radius: 6px;
+				background-color: #1CACEB;
+				color: white;
+			}
+			.bizlist li:active{
+				opacity: .8;
 			}
 		</style>
 	</head>
 
 	<body>
-		<div class="wb-footer wb-flex-box">
-			<div class="nav-tab tab-active" i="0"><img src="../img/shouye_act.png"/><p>首页</p></div>
-			<div class="nav-tab" i="1"><img src="../img/shangou.png"/><p>闪购</p></div>
-			<div class="nav-tab" i="2"><img src="../img/gouwuche.png"/><p>购物车</p></div>
-			<div class="nav-tab" i="3"><img src="../img/wode.png"/><p>我的</p><p id="msgDot" class="msg-dot red-dot"></p></div>
+		<div class="head-warp">
+			<img class="usericon" src="../img/usericon-max.png"/>
+			<p class="account"><span>账户余额:</span> <span class="monery red">100</span><span class="recharge">充值</span></p>
+			<div class="vipinfo">
+				<span class="vipcount"><span>会员数量:</span> <span class="red">10</span><span>个</span></span>
+				<span class="vipcomment"><span>会员点评:</span> <span class="red">10</span><span>条</span></span>
+			</div>
+			<p class="username">不二食堂</p>
+			<p class="iconfont icon-xiangji"></p>
+			<p class="iconfont icon-lanya"></p>
 		</div>
+		<ul class="bizlist">
+			<li>发普通红包</li>
+			<li>发朋友圈红包</li>
+			<li>发任务红包</li>
+			<li>发代金券</li>
+			<li>发积分</li>
+			<li>会员卡销售</li>
+			<li>会员管理</li>
+		</ul>
 	</body>
 
 	<script src="../js/mui.min.js" charset="utf-8"></script>
+	<script src="../js/TempBiz.js" charset="utf-8"></script>
 	<script src="../js/DomBiz.js" charset="utf-8"></script>
 	<script src="../js/app.js" charset="utf-8"></script>
-	<!--<script src="../js/ImBiz.js" charset="utf-8"></script>
-	<script src="https://g.alicdn.com/aliww/??h5.imsdk/2.1.5/scripts/yw/wsdk.js,h5.openim.kit/0.4.0/scripts/kit.js?mobile=1" charset="utf-8"></script>-->
-	<script type="text/javascript">
-		var subpages = ['main-home.html','main-act.html','main-shopcart.html','main-user.html'];//子页路径
-		var subObjs=new Array(4);//子页对象
-		var curIndex=0;//当前显示的子页下标
-		var imBiz;//im操作类
-		
+	<script type="text/javascript" charset="utf-8">
 		mui.init();
-		mui.plusReady(function(){
-			//显示第一个子页
-			getPageObj(0);
+		mui.ready(function() {//plusReady TODO
+			//获取传来的参数
+//			var value=plus.webview.currentWebview().key;
+			//联网获取数据
+//			getData(value);
 			
-			//点击导航切换子页
-			mui('.wb-footer').on('tap', '.nav-tab', function(e) {
-				var index = Number(this.getAttribute('i'));
-				EJ_ChangePage(index);
-			});
-			
-			//为尽快显示首页,延时3秒获取用户相关数据
-			setTimeout(function () {
-				EJ_LoginData();
-			},3000)
-			
-			//禁止右滑关闭
-			plus.webview.currentWebview().setStyle({'popGesture': 'none'});
-			
-			//android双击退出
-			doubleTapQuit();
+			//点击事件
+//			$("#id").click(function(e) {
+//				var act=data[Number(this.getAttribute("i"))];
+//				var href = e.target.getAttribute("href");
+//				if (href=="toshare") {
+//					
+//				}else{
+//					
+//				}
+//			})
 		});
 		
-		/*获取指定下标界面对象*/
-		function getPageObj (i) {
-			var pageObj=subObjs[i];
-			if (!pageObj) {
-				//如果模板页未创建则先创建
-				pageObj = plus.webview.create(subpages[i], subpages[i], {top:"0",bottom:'54px'});
-				plus.webview.currentWebview().append(pageObj);
-				subObjs[i]=pageObj;
-			}
-			return pageObj;
-		}
-		
-		/*切换指定的界面*/
-		function EJ_ChangePage (i,param) {
-			if (curIndex!=i) {
-				getPageObj(i).show();//显示目标页
-				getPageObj(curIndex).hide();//隐藏当前页
-				//如果是闪购,则需跳去指定界面
-				if (i==1) {
-					getPageObj(i).evalJS("EJ_ChangeSubPage("+param+")")
-				}
-				//当前按钮不选中
-				var navTabs=document.getElementsByClassName("nav-tab");
-				navTabs[curIndex].classList.remove("tab-active");
-				var curImg=navTabs[curIndex].getElementsByTagName("img")[0];
-				curImg.src=curImg.src.replace("_act","");
-				//指定按钮选中
-				navTabs[i].classList.add("tab-active");
-				var tabImg=navTabs[i].getElementsByTagName("img")[0];
-				tabImg.src=tabImg.src.replace(".png","_act.png");
-				//标记
-				curIndex=i;
-			}
-		}
-		
-		/*需要登录才加载的数据*/
-		function EJ_LoginData(){
-//			if(UserObj.isLogin(false)){
-//				//初始化im
-//				initIM();
-//			}
-		}
-		
-		/*初始化IM*/
-//		function initIM () {
-//			imBiz  = new ImBiz();
-//			//登录
-//			imBiz.login(UserObj.getUid(), function () {
-//				//获取未读消息
-//				imBiz.getUnreadMsgCount(function(){
-//					EJ_SetNoReadMsgs();
-//				});
-//				//设置监听只在主页设置
-//				imBiz.addMsgReceived();
-//			});
+		/*联网获取数据*/
+//		function getData(orderId){
+//			//参数
+//			var param={"IFID":23,"PR":[[orderId],[orderId],[orderId]]};
+//			ajaxData(HostDataInV2, function(dataArr) {
+//				//返回数据
+//				var data=JSON.parse(dataArr[2]);
+//				//设置界面数据
+//				initView(data);
+//				
+//			},param);
 //		}
-		
-		/*设置消息未读红点 设置已读失败 暂时隐藏*/
-		function EJ_SetNoReadMsgs(isRead){
-//			if (!imBiz) return;
-//			if(isRead) imBiz.unreadMsgCount=0;//点击个人中心的小圆点,会调本方法isRead=true;
-//			var count=imBiz.unreadMsgCount;
-//			if(count>0){
-//			  	$("#msgDot").show(true);
-//			}else{
-//				$("#msgDot").hide();
-//				//设置已读客服的消息
-//				imBiz.setReadState("雅布力开发");
+
+		/*设置界面数据*/
+//		function initView(data) {
+//			var listDom=document.getElementById("upscroll-list");
+//			listDom.innerHTML="";
+//			for (var i = 0; i < data.length; i++) {
+//				var liData=data[i];
+				//拼接
+//				var str='';
+//				str+='';
+//				str+='';
+//				str+='';
+//				str+='';
+//				str+='';
+//				str+='';
+//				str+='';
+//				str+='';
+//				//加入
+//				var liDom=document.createElement("li");
+//				liDom.innerHTML=str;
+//				listDom.appendChild(liDom);
+//				//存入变量到li
+//				liDom.setAttribute("liID",liData.id);
+//				//li的点击事件
+//				liDom.addEventListener("tap",function() {
+//					var liID=this.getAttribute("liID");
+//					
+//				})
+//				
 //			}
-//			//刷新个人中心
-//			var mainUser=subObjs[3];
-//			mainUser&&mainUser.evalJS("EJ_SetNoReadMsgs("+count+")");
-		}
-		
-		/*重新登录im 关闭聊天界面chat.html需要重新监听消息*/
-		function EJ_ReloginIM () {
-//			imBiz&&imBiz.relogin(UserObj.getUid());
-		}
+//		}
 	</script>
+
 </html>

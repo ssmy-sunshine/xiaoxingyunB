@@ -32,12 +32,9 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none !important;
 }
 input,textarea{-webkit-user-select: text;}
+span{display: inline-block;vertical-align: middle;}
 /*vertical-align:bottom;清除img底部2px的空白*/
-img{
-	width:100%;
-	height:auto;
-	vertical-align:bottom;
-}
+img{width:100%; height:auto; vertical-align:bottom; }
 
 /*统一颜色*/
 .red{ color: #ea1d3f; }
@@ -72,6 +69,8 @@ img{
 }
 /*右浮动*/
 .right{float: right}
+/*元素居中对齐*/
+.align-mid *{vertical-align: middle;}
 /*标题栏*/
 .wb-head{
 	position: fixed;
