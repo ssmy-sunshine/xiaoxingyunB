@@ -18,9 +18,6 @@ body {
 }
 html,body{height: 100%}
 ul{list-style-type: none}
-a {text-decoration: none;color: #646464;}
-a:hover{text-decoration: none}
-table {width: 100%; text-align: center; border-collapse: collapse; border-spacing:0}
 /*输入框光标对齐*/
 input,
 input::-webkit-input-placeholder{
@@ -259,26 +256,6 @@ img{
 	color: white;
 }
 
-/*可水平滑动的列表
-<div class="scrollx-warp">
-	<ul class="scrollx-list">
-		<li></li>
-	</ul>
-</div>
- * */
-.scrollx-warp{ width: 100%; overflow-x: auto; }
-.scrollx-list{ width: 12000px; }
-.scrollx-list li{ float: left; text-align: center; }
-
-/*小圆点*/
-.red-dot{
-	display: inline-block;
-	width: 8px;
-	height: 8px;
-	border-radius: 50%;
-	background-color: #FE2D66;
-}
-
 /*透明动画*/
 .anim_opacity {animation: anim_opacity 1s; -webkit-animation: anim_opacity 1s;}
 @keyframes anim_opacity {0%{ opacity: 0; } 100%{ opacity: 1; }}
@@ -286,32 +263,3 @@ img{
 
 /*隐藏*/
 .hide{display: none}
-
-/*正式店主R;原体验店主T;C端;才会显示的布局*/
-.R-block,
-.R-inblock,
-.T-block,
-.T-inblock,
-.C-block,
-.C-inblock,
-.RT-block,
-.RT-inblock,
-.RC-inblock,
-.TC-inblock{
-	display: none !important;
-}
-/*显示*/
-.show-block{display: block !important}
-.show-inblock{display: inline-block !important}
-
-/*<p class="userb-price-warp"><span class="userb-price">236</span><span class="grayline">/</span><span class="userb-profit-tip">赚</span><span class="userb-profit">5</span></p>*/
-.userb-price-warp *{
-	font-size: 15px;
-	margin-right: 4px;
-	white-space: nowrap;
-	vertical-align: baseline;
-}
-.userb-price-warp .userb-price{ color: black; }
-.userb-price-warp .grayline{ color: darkgray; }
-.userb-price-warp .userb-profit-tip{ font-size: 14px; color: #FE2D66; }
-.userb-price-warp .userb-profit{ color: #FE2D66; }

@@ -1,31 +1,7 @@
 /*接口域名*/
 var isConsole=true;//TODO 是否输出,正式项目需改为false
 //var Host="http://www.yblbaby.net:800/";//测试项目服务器地址
-//var HostWX="http://www.yblbaby.net:801/";//测试项目微信端接口地址
 var Host="http://www.yblbaby.net:98/";//正式项目服务器地址
-var HostWX="http://www.yblbaby.net/";//正式项目微信端接口地址,无端口
-var HostDataQuery=Host+"DataInterface/WBAPP/WBAPPData_QueryV2.ashx";//无需登录的查询接口
-var HostDataInV2=Host+"DataInterface/WBAPP/WBAPPData_INV2.ashx";//需登录的查询接口
-
-/*分享链接*/
-function getShareUrl(obj) {
-	var shareUrl=HostWX+'wbwx/';
-	var uid=UserObj.getUid();
-	if(UserObj.isUserC()) uid=UserObj.getFatherUID()||1;//如果是C端用户分享的是邀请人的店铺
-	obj=obj||{};
-	if(obj.pid) {//分享商品
-		shareUrl+='common/product.html?pid='+obj.pid+'&sid='+uid;
-	}else if (obj.actId) {//分享活动
-		shareUrl+='common/actCenter.html?actId='+obj.actId+'&sid='+uid;
-	}else if (obj.groupId) {//分享团购
-		shareUrl+='common/actGroupDetail.html?groupId='+obj.groupId+'&goodsId='+obj.goodsId+'&sid='+uid;
-	}else if (obj.regin) {//邀请注册
-		shareUrl+='common/regin.html?sid='+uid;
-	}else{//没值则默认打开微信端首页
-		shareUrl+='main/main.html?sid='+uid;
-	}
-	return shareUrl;
-}
 
 /*加载H5插件完成后的事件*/
 document.addEventListener("plusready", function() {
@@ -86,107 +62,12 @@ var UserObj={
 	setNickname : function(nickname) {
 		setLocalStorage("UNickName",nickname);
 	},
-	/*获取用户注册时间*/
-	getRegisTime : function() {
-		return localStorage.getItem("RegisTime");
-	},
-	setRegisTime : function(regisTime) {
-		setLocalStorage("RegisTime",regisTime);
-	},
-	/*获取用户会员等级: 0完成微信注册; 1注册手机号; 2选择礼包; 3已付款成店主*/
-	getLevelTag : function() {
-		return localStorage.getItem("RegisState");
-	},
-	setLevelTag : function(regisState) {
-		setLocalStorage("RegisState",regisState);
-	},
-	getLevelName : function() {
-		if(UserObj.isUserTest()){
-			return "体验店主";
-		}else{
-			return localStorage.getItem("LevelName")||"普通用户";
-		}
-	},
-	setLevelName : function(levelName) {
-		setLocalStorage("LevelName",levelName);
-	},
-	/*是否C端用户*/
-	isUserC : function() {
-		return !UserObj.isUserTest()&&!UserObj.isUserReal();//不是原体验店主并且不是正式店主
-	},
-	/*是否B端用户*/
-	isUserB : function() {
-		return UserObj.isUserTest()||UserObj.isUserReal();//原体验店主或正式店主
-	},
-	/*是否为体验店主*/
-	isUserTest : function() {
-		//BC分离版本(3月31号)以前注册且在4月30号前都没付款的用户为体验店主
-		var timeRegis=UserObj.getRegisTime();
-		if(UserObj.isLogin(false)&&timeRegis&&!UserObj.isUserReal()&&getDateDiff("2017/03/31 00:00:00",timeRegis)>0&&getDateDiff("2017/04/30 00:00:00",UserObj.getSystemDate())>0){
-			return true;
-		}else{
-			return false;
-		}
-	},
-	/*是否为正式店主*/
-	isUserReal : function() {
-		return UserObj.isLogin(false)&&(UserObj.getLevelTag()==3);
-	},
-	/*缓存系统日期*/
-	getSystemDate : function() {
-		return localStorage.getItem("SystemDate");
-	},
-	setSystemDate : function(time) {
-		setLocalStorage("SystemDate",time);
-	},
 	/*获取用户测试身份: 0普通用户,1测试人员;2开发人员;*/
 	getTestTag : function() {
 		return localStorage.getItem("USER_ISTEST");
 	},
 	setTestTag : function(type) {
 		setLocalStorage("USER_ISTEST",type);
-	},
-	/*获取用户邀请人*/
-	getFatherUID : function() {
-		return localStorage.getItem("FatherUID");
-	},
-	setFatherUID : function(fatherUID) {
-		setLocalStorage("FatherUID",fatherUID);
-	},
-	/*获取用户的店铺id*/
-	getShopId : function() {
-		return Number(localStorage.getItem("SHOP_ID")||1);
-	},
-	setShopId : function(shopid) {
-		setLocalStorage("SHOP_ID",shopid);
-	},
-	/*获取用户的店铺id*/
-	getShopCode : function() {
-		return Number(localStorage.getItem("ShopCode")||1);
-	},
-	setShopCode : function(shopCode) {
-		setLocalStorage("ShopCode",shopCode);
-	},
-	/*获取用户的店铺昵称*/
-	getShopName : function() {
-		return localStorage.getItem("SHOP_NAME");
-	},
-	setShopName : function(shopname) {
-		setLocalStorage("SHOP_NAME",shopname);
-	},
-	/*获取用户的店铺背景图*/
-	getShopImg : function() {
-		return localStorage.getItem("SHOP_IMG");
-	},
-	setShopImg : function(shopimg) {
-		setLocalStorage("SHOP_IMG",getImgpath(shopimg));
-	},
-	/*获取用户的店铺说明*/
-	getShopTip : function() {
-		return localStorage.getItem("SHOP_TIP")||"欢迎光临我的店铺~";
-	},
-	setShopTip : function(shoptip) {
-		setLocalStorage("SHOP_TIP",shoptip||"欢迎光临我的店铺~");
 	},
 	/*获取用户登录的token*/
 	getTK : function() {
@@ -200,7 +81,7 @@ var UserObj={
 		if (UserObj.getUid()&&UserObj.getTK()) {
 			return true;
 		} else{
-			if(isToLogin!=false) openWindow("../account/login-tel.html");
+			if(isToLogin!=false) openWindow("../account/login.html");
 			return false;
 		}
 	},
@@ -216,22 +97,15 @@ var UserObj={
 					UserObj.setTK(data[2]);
 					UserObj.setTel(tel);
 					UserObj.setPassword(pwMd5);
-					//获取用户其他基本信息
-					UserObj.getUserinfo(function(isOk){
-						//登录成功回调
-						if(isOk){
-							success&&success();
-						} else{
-							mui.toast("获取账户信息失败,请重新登录")
-						}
-					})
+					//登录成功回调
+					success&&success();
 			},{Mnum:tel,pass:pwMd5},function(e) {
 				//登录失败回调
 				err&&err(e);
 			},hideWait,false);
 		}else{
 			//如果没有传账号密码,则去登录页
-			openWindow("../account/login-tel.html");
+			openWindow("../account/login.html");
 		}
 	},
 	/*获取用户信息*/
@@ -248,20 +122,10 @@ var UserObj={
 			//先缓存变量,其他界面公用
 			UserObj.setIcon(user["3782"]);//头像
 			UserObj.setNickname(user.UNickName);//用户名
-			UserObj.setShopId(user.ShopID);//店铺id
-			UserObj.setShopCode(user.ShopCode);//店铺邀请码
-			UserObj.setShopImg(user.ShopImg);//店铺背景
-			UserObj.setShopName(user["3780"]);//店名
-			UserObj.setRegisTime(user.RegisTime);//注册时间
-			UserObj.setLevelTag(user.RegisState);//注册状态
 			UserObj.setLevelName(user.UserType);//会员级别名称
 			UserObj.setTestTag(user.IsTestUser);//是否为测试人员,在updateBiz.js用到
-			UserObj.setFatherUID(user.FatherUID);//邀请注册的用户id
-			UserObj.setSystemDate(dataArr[dataArr.length-1]);//服务器时间
 			//回调
 			callback&&callback(true);
-			//更新用户最新活动时间
-			ajaxData(HostDataInV2,null,{"IFID":11,"PR":[[UserObj.getUid()]]},null,true);
 		},param,function(){
 			callback&&callback();
 		},true);
@@ -283,48 +147,6 @@ function getImgpath(imgpath){
 		return imgpath;
 	} else{
 		return Host+imgpath;
-	}
-}
-
-/*BC分离需要显示的界面*/
-function showViewByBCuser(){
-	var isLogin=UserObj.isLogin(false);
-	if (isLogin&&UserObj.isUserReal()){
-		//R已付款,正式店主
-		$(".R-block").addClass("show-block");
-		$(".R-inblock").addClass("show-inblock");
-		$(".RT-block").addClass("show-block");
-		$(".RT-inblock").addClass("show-inblock");
-		$(".RC-inblock").addClass("show-inblock");
-		$(".T-block").removeClass("show-block");
-		$(".T-inblock").removeClass("show-inblock");
-		$(".TC-inblock").removeClass("show-inblock");
-		$(".C-block").removeClass("show-block");
-		$(".C-inblock").removeClass("show-inblock");
-	}else{
-		//TC端用户或没有登录的用户
-		$(".TC-inblock").addClass("show-inblock");
-		$(".R-block").removeClass("show-block");
-		$(".R-inblock").removeClass("show-inblock");
-		if(isLogin&&UserObj.isUserTest()){
-			//T原体验店主
-			$(".RT-block").addClass("show-block");
-			$(".RT-inblock").addClass("show-inblock");
-			$(".T-block").addClass("show-block");
-			$(".T-inblock").addClass("show-inblock");
-			$(".RC-inblock").removeClass("show-inblock");
-			$(".C-block").removeClass("show-block");
-			$(".C-inblock").removeClass("show-inblock");
-		}else{
-			//C端用户或没有登录的用户
-			$(".RT-block").removeClass("show-block");
-			$(".RT-inblock").removeClass("show-inblock");
-			$(".T-block").removeClass("show-block");
-			$(".T-inblock").removeClass("show-inblock");
-			$(".RC-inblock").addClass("show-inblock");
-			$(".C-block").addClass("show-block");
-			$(".C-inblock").addClass("show-inblock");
-		}
 	}
 }
 
@@ -467,12 +289,6 @@ function ajaxData(url,success,param,err,hideWait,isParamKey,paramJson,dataJson) 
 	sendAjax();
 }
 
-/*获取json,参数param默认带TK和UID*/
-function ajaxJson (url,success,param,err,hideWait) {
-	//传参类型和返回数据类型都是json字符串
-	ajaxData(url,success,param,err,hideWait,false,true,true);
-}
-
 /*显示进度条 modal是否禁止外部可按,默认true不可按*/
 function showWaiting(hintText,modal) {
 	modal = modal==null? true : false;
@@ -517,33 +333,6 @@ function muiOpenWindow(url,param,showWait,aniShow,isClose){
 		styles:{scrollIndicator:"none"},
 		show: {aniShow: aniShow||"slide-in-right",duration: 400}
 	})
-}
-
-/*创建界面,预加载*/
-function preloadWindow(url,param,styles) {
-	styles=styles||{};
-	styles.scrollIndicator="none";
-	var page = mui.preload({
-	    url:url,
-	    id:url,
-	    styles:styles,
-	    extras:param
-	});
-	return page;
-}
-
-/*显示界面,预加载*/
-function showWindow(id_obj,anim,delay) {
-	var win= typeof id_obj=="object" ? id_obj : plus.webview.getWebviewById(id_obj);
-	if (win) {
-		if (delay>0) {
-			setTimeout(function () {
-				win.show(anim||"pop-in",400);
-			},delay);
-		} else{
-			win.show(anim||"pop-in",400);
-		}
-	}
 }
 
 /*加载图片
@@ -808,19 +597,6 @@ Array.prototype.remove = function(val) {
     }
 }
 
-/*如果有活动且没有结束(进行中或未开始)
- *1.则显示活动价SalePrice;否则显示特卖价price
- *2.则显示活动利润Profit;否则显示NoActProfit
- * 返回的数据{actIsEnd:false,profit:"5.00",price:"80.00"}
- */
-function getActData(EndTime,systime,SalePrice,price,Profit,NoActProfit) {
-	var actIsEnd=!EndTime||!systime||getDateDiff(systime, EndTime) > 0;//活动是否结束
-	var actData={actIsEnd:actIsEnd};
-	actData.price = (actIsEnd||!SalePrice) ? (price||0) : (SalePrice||0);
-	actData.profit = actIsEnd ? (NoActProfit||0) : (Profit||0);
-	return actData;
-}
-
 /*安卓双击退出程序*/
 function doubleTapQuit(){
 	if(mui.os.ios) return;
@@ -848,10 +624,4 @@ function removeHtmlTab(str){
 	//方法二: 转义html标签
 //	var  entry = { "'": "&apos;", '"': '&quot;', '<': '&lt;', '>': '&gt;' };
 //  return str.replace(/(['")-><&\\\/\.])/g, function ($0) { return entry[$0] || $0; });
-}
-
-/*获取 "¥128 / 赚 5"的HTML
- * <p class="userb-price-warp"><span class="userb-price monery">236</span><span class="grayline">/</span><span class="userb-profit-tip">赚</span><span class="userb-profit">5</span></p>*/
-function getUserBPriceProfit(price,profit) {
-	return '<p class="userb-price-warp"><span class="userb-price monery">'+price+'</span><span class="grayline">/</span><span class="userb-profit-tip">赚</span><span class="userb-profit">'+profit+'</span></p>';
 }

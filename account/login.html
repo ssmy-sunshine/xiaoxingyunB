@@ -13,12 +13,10 @@
 	</head>
 
 	<body>
-		<p class="wb-back btn-circle iconfont icon-fanhui wb-head-left"></p>
-		<p class="wb-title">使用密码登录</p>
 		<img class="login-bg-1" src="http://www.yblbaby.net/wbwx/imgApp/login-bg-1.png"/>
 		<div class="wb-content">
-			<img class="logo" src="../img/usericon-blue.png"/>
-			<img class="login-slogan" src="http://www.yblbaby.net/wbwx/imgApp/login-slogan.png"/>
+			<img class="logo" src="../img/logo.png"/>
+			<p class="login-slogan">生活处处充满小幸运</p>
 			<div class="input-warp">
 				<div class="input-item">
 					<p class="input-left iconfont icon-dianhua"></p>
@@ -31,8 +29,7 @@
 					<p id="passwordDel" class="input-right iconfont icon-guanbi hide"></p>
 				</div>
 			</div>
-			<p id="btnSubmit" class="btn-submit wb-btn btn-gray btn-radius">进入雅布力</p>
-			<p id="toPwReset" class="btn-right tohref" href="../account/pw-reset.html">忘记密码</p>
+			<p id="btnSubmit" class="btn-submit wb-btn btn-gray btn-radius">进入小幸运</p>
 		</div>
 		<img class="login-bg-2" src="http://www.yblbaby.net/wbwx/imgApp/login-bg-2.png"/>
 	</body>
@@ -115,15 +112,8 @@
 				}
 				//登录
 				UserObj.login(tel,md5(pass),function() {
-					//刷新所有界面的 EJ_LoginData方法
-					var allWeb=plus.webview.all();
-					for(var i = allWeb.length-1; i >= 0; i--){
-						allWeb[i].evalJS("EJ_LoginData()");
-					}
-					//登录成功,延时1秒关闭,给页面刷新数据
-					setTimeout(function () {
-						mui.back();
-					},500);
+					//跳转主页
+					openWindow("../main/main.html");
 				});
 				
 			})
