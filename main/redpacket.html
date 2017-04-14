@@ -10,110 +10,82 @@
 		<link rel="stylesheet" href="../fonts/iconfont.css">
 		<link rel="stylesheet" href="../css/app.css">
 		<style type="text/css">
-			/*顶部*/
-			.head-warp{
+			body{background-color: #FAFAFA}
+			/*输入框*/
+			.input-warp{
 				position: relative;
-				height: 130px;
-				border-bottom: 1px solid #eee;
+				width: 90%;
+				min-height: 50px;
+				border: 1px solid #eee;
+				border-radius: 6px;
+				margin: 16px auto;
+				background-color: white;
 			}
-			.head-warp .usericon{
-				width: 72px;
-				height: 72px;
-				margin: 20px 0 0 16px;
-			}
-			.head-warp .account{
+			.input-warp .input-left{
 				position: absolute;
-				top: 24px;
-				left: 105px;
+				top: 0;
+				left: 0;
+				padding:17px 12px;
 			}
-			.head-warp .recharge{
-				font-size: 12px;
-				margin-left: 12px;
-				padding: 6px 16px;
-				background-color: #FE2D66;
-				border-radius: 3px;
-				color: white;
+			.input-warp .input-center{
+				width: 100%;
+				padding: 15px 40px 15px 0;
+				text-align: right;
 			}
-			.head-warp .vipinfo{
-				position: absolute;
-				left: 105px;
-				top: 70px;
-				font-size: 14px;
-			}
-			.head-warp .vipinfo .vipcomment{
-				margin-left: 10px;
-			}
-			.head-warp .username{
-				font-size: 14px;
-				margin-top: 10px;
-				width: 110px;
-				text-align: center;
-			}
-			.head-warp .icon-xiangji{
+			.input-warp .input-right{
 				position: absolute;
 				top: 0;
 				right: 0;
-				width: 40px;
-				height: 50px;
-				line-height: 50px;
-				font-size: 24px;
-				text-align: center;
-				color: #666;
+				padding: 17px 12px;
 			}
-			.head-warp .icon-lanya{
-				position: absolute;
-				right: 0;
-				bottom: 0;
-				width: 40px;
-				height: 40px;
-				line-height: 40px;
-				font-size: 24px;
-				text-align: center;
-				color: gray;
+			.input-warp .remark{
+				padding: 11px 16px;
 			}
-			/*业务列表*/
-			.bizlist{
+			.price-all{
+				font-size: 40px;
+				margin: 40px 0;
 				text-align: center;
 			}
-			.bizlist li{
-				float: left;
-				display: inline-block;
-				width: 28%;
-				font-size: 14px;
-				margin:30px 0 0 4%;
-				padding: 25px 0;
-				white-space: nowrap;
-				border-radius: 6px;
-				background-color: #1CACEB;
-				color: white;
-			}
-			.bizlist li:active{
-				opacity: .8;
+			.btn-send{
+				width: 90%;
+				margin: 5px 5%;
+				border-radius: 5px;
 			}
 		</style>
 	</head>
 
 	<body>
-		<div class="head-warp">
-			<img class="usericon" src="../img/usericon-max.png"/>
-			<p class="account"><span>账户余额:</span> <span class="monery red">100</span><span class="recharge">充值</span></p>
-			<div class="vipinfo">
-				<span class="vipcount"><span>会员数量:</span> <span class="red">10</span><span>个</span></span>
-				<span class="vipcomment"><span>会员点评:</span> <span class="red">10</span><span>条</span></span>
-			</div>
-			<p class="username">不二食堂</p>
-			<p class="iconfont icon-xiangji"></p>
-			<p class="iconfont icon-lanya"></p>
+		<div class="wb-head">
+			<p class="wb-back iconfont icon-fanhui"></p>
+			<p class="wb-title">发普通红包</p>
 		</div>
-		<ul class="bizlist">
-			<li class="tohref" href="../main/redpacket.html" title="发普通红包">发普通红包</li>
-			<li>发朋友圈红包</li>
-			<li>发任务红包</li>
-			<li>发代金券</li>
-			<li>发积分</li>
-			<li>会员卡销售</li>
-			<li>会员管理</li>
-		</ul>
+		<div class="wb-content">
+			<div class="input-warp">
+				<p class="input-left">总金额</p>
+				<input class="input-center" type="number" placeholder="请输入红包金额"/>
+				<p class="input-right">元</p>
+			</div>
+			<div class="input-warp">
+				<p class="input-left">红包个数</p>
+				<input class="input-center" type="number" placeholder="请输入红包个数"/>
+				<p class="input-right">个</p>
+			</div>
+			<div class="input-warp">
+				<p class="input-left">送积分</p>
+				<input class="input-center" type="number" placeholder="0"/>
+				<p class="input-right">个</p>
+			</div>
+			<div class="input-warp">
+				<p class="input-left">送优惠券</p>
+				<p class="input-right iconfont icon-youjiantou"></p>
+			</div>
+			<div class="input-warp">
+				<p class="input-left">留 言</p>
+				<input class="remark input-center" type="number" placeholder="欢迎下次光临~"/>
+			</div>
+			<p class="price-all monery">0.00</p>
+			<p class="btn-send wb-btn btn-red">塞钱进红包</p>
+		</div>
 	</body>
 
 	<script src="../js/mui.min.js" charset="utf-8"></script>

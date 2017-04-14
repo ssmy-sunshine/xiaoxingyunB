@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../fonts/iconfont.css">
+		<link rel="stylesheet" href="../css/app.css">
+		<style type="text/css">
+			/*标题先隐藏,如果传来的title==null,则显示wb-head2*/
+			#wb-head1,#wb-head2{
+				display: none;
+			}
+			/*正在加载*/
+			.wb-content{
+				width: 100%; height: 100%;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="wb-head1" class="wb-head">
+			<p id="wb-back" class="wb-back iconfont icon-fanhui"></p>
+			<p id="wb-title" class="wb-title"></p>
+		</div>
+		<p id="wb-head2" class="wb-back btn-circle iconfont icon-fanhui wb-head-left"></p>
+		<div class="wb-content">
+			<img style="width: 100%; margin-top: 40%;" src="../img/loading-rect.png"/>
+		</div>
+	</body>
+
+	<script src="../js/mui.min.js" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		//返回
+		document.getElementById("wb-back").addEventListener("tap",function() {
+			mui.back();
+		})
+		//模版页自定义事件，更新Header; mui.fire(winObj, "方法名", {key: value});
+		window.addEventListener("setHeader", function(e) {
+			var title=e.detail.title;
+			var wbHead1=document.getElementById("wb-head1");
+			var wbHead2=document.getElementById("wb-head2");
+			var wbTitle=document.getElementById("wb-title");
+			//如果标题==null,则加载圆形标题的模板,否则是正常标题的模板
+			if (title==null) {
+				wbHead2.style.display="block";
+				wbHead1.style.display="none";
+			} else{
+				wbHead1.style.display="block";
+				wbHead2.style.display="none";
+				wbTitle.innerHTML = title;
+			}
+		});
+	</script>
+
+</html>
