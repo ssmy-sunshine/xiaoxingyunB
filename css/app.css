@@ -1,0 +1,317 @@
+/*统一样式:全局性,谨慎修改,全面测试*/
+* {
+	margin: 0;
+	padding: 0;
+	border: none;
+	outline: none;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+body {
+	font-family:Helvetica;
+	font-size: 16px;
+	line-height: 16px;
+	background-color: white;
+	-webkit-user-select:none;
+	-webkit-touch-callout:none;
+	-webkit-tap-highlight-color:transparent;
+}
+html,body{height: 100%}
+ul{list-style-type: none}
+a {text-decoration: none;color: #646464;}
+a:hover{text-decoration: none}
+table {width: 100%; text-align: center; border-collapse: collapse; border-spacing:0}
+/*输入框光标对齐*/
+input,
+input::-webkit-input-placeholder{
+	font-size: 16px;
+	line-height: normal;
+}
+/*输入框,清除浏览器默认样式*/
+input,
+textarea,
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+}
+input,textarea{-webkit-user-select: text;}
+/*vertical-align:bottom;清除img底部2px的空白*/
+img{
+	width:100%;
+	height:auto;
+	vertical-align:bottom;
+}
+
+/*统一颜色*/
+.red{ color: #ea1d3f; }
+.pink{ color: #FF6990; }
+.blue{ color: #65aadd; }
+.gray{ color: gray; }
+/*灰度*/
+.grayscale{ -webkit-filter: grayscale(100%) }
+/*图标字体,可直接设置宽高*/
+.iconfont { display: inline-block;vertical-align: middle;}
+/*单行,超过部分用省略号...*/
+.singleline{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+/*双行,超过部分用省略号...*/
+.twoline{
+	display: -webkit-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+/*中横线*/
+.midline{text-decoration: line-through}
+/*价格前面加入￥*/
+.monery:before{
+	content: "￥";
+	font-size: 12px;
+	padding-right: 2px;
+}
+/*右浮动*/
+.right{float: right}
+/*标题栏*/
+.wb-head{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 44px;
+	background-color: white;
+	border-bottom: 1px solid #eee;
+}
+.wb-title{
+	display: inline-block;
+	position: absolute;
+	left: 50%;
+	width: 70%;
+	height: 44px;
+	line-height: 44px;
+	margin-left: -35%;
+	font-size: 17px;
+	text-align: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.wb-head-left{
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.wb-head-right{
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 50px;
+	height: 44px;
+	line-height: 44px;
+	text-align: center;
+}
+.wb-head-right:active{ opacity: 0.5; }
+/*返回按钮*/
+.wb-back,
+.head-btn{
+	width: 50px;
+	height: 44px;
+	line-height: 44px;
+	text-align: center;
+}
+.wb-back:active,
+.head-btn:active{ opacity: 0.5; }
+/*内容*/
+.wb-head~.wb-content{ padding-top: 44px; }
+/*底部*/
+.wb-footer{
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+/*遮罩*/
+.wb-shadow {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,.3);
+}
+/*
+ *z-index说明:
+ *标题wb-head 9910
+ *内容wb-content 1
+ *底部wb-footer 9900
+ *遮罩wb-shadow 9920
+ *垂直布局middle-warp 9930
+ */
+.wb-head,
+.wb-head-left,
+.wb-head-right{ z-index: 9910; }
+.wb-content{ z-index: 1; }
+.wb-footer{ z-index: 9900; }
+.wb-shadow { z-index: 9920;}
+.middle-warp { z-index: 9930;}
+
+/*按钮*/
+.wb-btn{
+	padding: 14px;
+	text-align: center;
+	color: white;
+}
+.btn-act:active,
+.wb-btn:active,
+.btn-red-radius:active{ opacity: 0.75; }
+/*透明白色边框按钮*/
+.btn-white{border: 1px solid white}
+/*紫红色按钮*/
+.btn-purple{background-color: #FF6990}
+/*蓝色按钮*/
+.btn-blue{background-color: #1AA8E3}
+/*红色按钮*/
+.btn-red{background-color: #EA1C40}
+/*红色圆角按钮*/
+.btn-red-radius{
+	display: inline-block;
+	font-size: 12px;
+	padding: 6px 22px;
+	border-radius: 40px;
+	background-color: #EA1C40;
+	color: white;
+}
+/*灰色按钮*/
+.btn-gray{background-color: #bbb;color: white;}
+/*按钮圆角*/
+.btn-radius{border-radius: 6px}
+/*圆形半透明按钮*/
+.btn-circle{
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+	padding: 0;
+	margin: 8px;
+	border-radius: 50%;
+	background-color: rgba(0,0,0,.3);
+	text-align: center;
+	color: white;
+}
+
+/*可点击的列表
+<div class="wb-item">关于我们<p class="wb-item-right"><span>应用简介</span> <span class="iconfont icon-youjiantou"></span></p></div>
+ * */
+.wb-item{
+	position: relative;
+	border-bottom: 1px solid #eee;
+	padding: 15px;
+	background-color: white;
+}
+.wb-item *{vertical-align: middle}
+.wb-item .wb-item-right{
+	position: absolute;
+	top: 50%;
+	right: 14px;
+	margin-top: -8px;
+	font-size: 12px;
+	color: gray;
+}
+.wb-item .icon-youjiantou{ font-size: 11px; }
+.wb-item:active{ background-color: #FAFAFA; }
+
+/*数据为空的提示*/
+.wb-empty-box{width: 100%;padding-top: 50px; text-align: center;}
+.wb-empty-icon{width: 45%;}
+.wb-empty-tip{max-width: 80%;font-size: 13px;margin: 8px auto; color: gray; }
+.wb-empty-btn{display: none; max-width: 50%;margin: 20px auto; color: #65AADD;background-color: white;border: 1px solid #65AADD;border-radius: 6px;padding: 10px 40px;}
+.wb-empty-btn:active{opacity: .75;}
+
+/*居中布局
+<div class="middle-warp"><!--此处不可换行--><div class="middle-content">
+	//内容布局,随意写
+</div></div>
+ * */
+.middle-warp{position: relative; height: 100%; text-align: center; }
+.middle-warp:before { content: ''; display: inline-block; height: 100%; vertical-align: middle; }
+.middle-content{ width: 100%; display: inline-block; vertical-align: middle;}
+
+/*平分布局，父元素指定class=wb-flex-box即可*/
+.wb-flex-box{ display: -webkit-box; display: -webkit-flex; display: flex; }
+.wb-flex-box > *{ -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; text-align: center;white-space: nowrap;}
+
+/*回到顶部的按钮*/
+.wb-totop{
+	z-index: 9990;
+	position: fixed;
+	right: 8px;
+	bottom: 20px;
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	background-color: rgba(0,0,0,.3);
+	border-radius: 50%;
+	font-size: 20px;
+	color: white;
+}
+
+/*可水平滑动的列表
+<div class="scrollx-warp">
+	<ul class="scrollx-list">
+		<li></li>
+	</ul>
+</div>
+ * */
+.scrollx-warp{ width: 100%; overflow-x: auto; }
+.scrollx-list{ width: 12000px; }
+.scrollx-list li{ float: left; text-align: center; }
+
+/*小圆点*/
+.red-dot{
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background-color: #FE2D66;
+}
+
+/*透明动画*/
+.anim_opacity {animation: anim_opacity 1s; -webkit-animation: anim_opacity 1s;}
+@keyframes anim_opacity {0%{ opacity: 0; } 100%{ opacity: 1; }}
+@-webkit-keyframes anim_opacity {0%{ opacity: 0; } 100%{ opacity: 1; }}
+
+/*隐藏*/
+.hide{display: none}
+
+/*正式店主R;原体验店主T;C端;才会显示的布局*/
+.R-block,
+.R-inblock,
+.T-block,
+.T-inblock,
+.C-block,
+.C-inblock,
+.RT-block,
+.RT-inblock,
+.RC-inblock,
+.TC-inblock{
+	display: none !important;
+}
+/*显示*/
+.show-block{display: block !important}
+.show-inblock{display: inline-block !important}
+
+/*<p class="userb-price-warp"><span class="userb-price">236</span><span class="grayline">/</span><span class="userb-profit-tip">赚</span><span class="userb-profit">5</span></p>*/
+.userb-price-warp *{
+	font-size: 15px;
+	margin-right: 4px;
+	white-space: nowrap;
+	vertical-align: baseline;
+}
+.userb-price-warp .userb-price{ color: black; }
+.userb-price-warp .grayline{ color: darkgray; }
+.userb-price-warp .userb-profit-tip{ font-size: 14px; color: #FE2D66; }
+.userb-price-warp .userb-profit{ color: #FE2D66; }

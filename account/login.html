@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../fonts/iconfont.css">
+		<link rel="stylesheet" href="../css/app.css">
+		<link rel="stylesheet" href="../css/login.css">
+	</head>
+
+	<body>
+		<p class="wb-back btn-circle iconfont icon-fanhui wb-head-left"></p>
+		<p class="wb-title">使用密码登录</p>
+		<img class="login-bg-1" src="http://www.yblbaby.net/wbwx/imgApp/login-bg-1.png"/>
+		<div class="wb-content">
+			<img class="logo" src="../img/usericon-blue.png"/>
+			<img class="login-slogan" src="http://www.yblbaby.net/wbwx/imgApp/login-slogan.png"/>
+			<div class="input-warp">
+				<div class="input-item">
+					<p class="input-left iconfont icon-dianhua"></p>
+					<input id="tel" class="input-center" type="number" placeholder="输入手机号" />
+					<p id="telDel" class="input-right iconfont icon-guanbi hide"></p>
+				</div>
+				<div class="input-item">
+					<p class="input-left iconfont icon-mima"></p>
+					<input id="password" class="input-center" type="password" placeholder="输入密码" />
+					<p id="passwordDel" class="input-right iconfont icon-guanbi hide"></p>
+				</div>
+			</div>
+			<p id="btnSubmit" class="btn-submit wb-btn btn-gray btn-radius">进入雅布力</p>
+			<p id="toPwReset" class="btn-right tohref" href="../account/pw-reset.html">忘记密码</p>
+		</div>
+		<img class="login-bg-2" src="http://www.yblbaby.net/wbwx/imgApp/login-bg-2.png"/>
+	</body>
+
+	<script src="../js/mui.min.js" charset="utf-8"></script>
+	<script src="../js/md5.min.js" charset="utf-8"></script>
+	<script src="../js/DomBiz.js" charset="utf-8"></script>
+	<script src="../js/TempBiz.js" charset="utf-8"></script>
+	<script src="../js/app.js" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		mui.init();
+		mui.plusReady(function() {
+			//填入缓存的账号
+			var tel=UserObj.getTel();
+			if (isTel(tel)){
+				$("#tel").val(tel);
+				$("#telDel").show();
+			}
+			
+			//手机号输入监听
+			document.getElementById("tel").addEventListener("input",function(){
+				//删除按钮显示隐藏
+				if (this.value) {
+					$("#telDel").show();
+				} else{
+					$("#telDel").hide();
+				}
+				//登录按钮变红变灰
+				if (isTel(this.value)&&$("#password").val().length>=6) {
+					$("#btnSubmit").addClass("btn-red").removeClass("btn-gray");
+				} else{
+					$("#btnSubmit").addClass("btn-gray").removeClass("btn-red");
+				}
+			})
+			//删除手机号
+			$("#telDel").click(function() {
+				$("#tel").val("");
+				$("#btnSubmit").addClass("btn-gray").removeClass("btn-red");
+				$(this).hide();
+			})
+			
+			//密码输入监听
+			document.getElementById("password").addEventListener("input",function(){
+				//删除按钮显示隐藏
+				if (this.value) {
+					$("#passwordDel").show();
+				} else{
+					$("#passwordDel").hide();
+				}
+				//登录按钮变红变灰
+				if (isTel($("#tel").val())&&this.value.length>=6) {
+					$("#btnSubmit").addClass("btn-red").removeClass("btn-gray");
+				} else{
+					$("#btnSubmit").addClass("btn-gray").removeClass("btn-red");
+				}
+			})
+			//删除密码
+			$("#passwordDel").click(function() {
+				$("#password").val("");
+				$("#btnSubmit").addClass("btn-gray").removeClass("btn-red");
+				$(this).hide();
+			})
+			$("#toPwReset").click(function() {
+				$("#password").val("");
+				$("#btnSubmit").addClass("btn-gray").removeClass("btn-red");
+				$("#passwordDel").hide();
+			})
+			
+			//登录
+			$("#btnSubmit").click(function() {
+				var tel=$("#tel").val();
+				if (!isTel(tel)) {
+					mui.toast("手机号不正确");
+					return;
+				}
+				var pass=$("#password").val();
+				if (pass.length<6) {
+					mui.toast("密码至少6位");
+					return;
+				}
+				//登录
+				UserObj.login(tel,md5(pass),function() {
+					//刷新所有界面的 EJ_LoginData方法
+					var allWeb=plus.webview.all();
+					for(var i = allWeb.length-1; i >= 0; i--){
+						allWeb[i].evalJS("EJ_LoginData()");
+					}
+					//登录成功,延时1秒关闭,给页面刷新数据
+					setTimeout(function () {
+						mui.back();
+					},500);
+				});
+				
+			})
+			
+		})
+		
+		/*验证是否为手机号*/
+		function isTel(tel){
+		    return /^1[3|4|5|7|8]\d{9}$/.test(tel);
+		}
+	</script>
+
+</html>

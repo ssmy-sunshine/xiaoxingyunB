@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		
+		<link rel="stylesheet" type="text/css" href="../css/app.css?v=1"/>
+		<style type="text/css">
+			/*版本升级信息*/
+			.update-info{display: none;padding: 40% 10% 0 10%;text-align: center;line-height: 30px;}
+			.update-info .xiaoren{width: 30%;margin-bottom: 10px;}
+			.update-info .progress{z-index: 10;position: relative;top: 4px;width: 0;height: 4px;border-radius: 10px;background-color: #FE2D66;}
+			.update-info .progress-bg{width: 100%;height: 4px;border-radius: 20px;background-color: #eee;}
+			/*海报广告*/
+			.ad-warp{
+				z-index: 9999;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-image: url(http://www.yblbaby.net:98/Images/WBimg/advertising3.jpg),url(../img/loading-sq-max.png);
+				background-position: center;
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-color: white;
+			}
+			.pass{
+				position: absolute;
+				right: 12px;
+				top: 12px;
+				width: 44px;
+				height: 44px;
+				line-height: 44px;
+				font-size: 12px;
+				border-radius: 50%;
+				text-align: center;
+				background-color: rgba(229,0,72,.6);
+				box-shadow: 1px 1px 6px #aaa;
+				color: white;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!--版本升级信息-->
+		<div id="update-info" class="update-info">
+			<img class="xiaoren" src="http://www.yblbaby.net/wbwx/imgApp/xiaoren.png"/>
+			<p>当前版本:<span id="curVersion"></span></p>
+			<p>升级新版本: <b id="newVersion"></b></p>
+			<p id="progress-tip" class="pink">0%</p>
+			<div id="progress" class="progress"></div>
+			<div class="progress-bg"></div>
+		</div>
+		<!--海报广告-->
+		<div id="ad-warp" class="ad-warp"><p id="pass" class="pass">跳过</p></div>
+	</body>
+
+	<script src="../js/mui.min.js" charset="utf-8"></script>
+	<script src="../js/DomBiz.js" charset="utf-8"></script>
+	<script src="../js/app.js?v=1" charset="utf-8"></script>
+	<script src="../js/updateBiz.js?v=1" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		var mainPath="../main/main.html";
+		var isPass=false;//是否点击跳转
+		
+		mui.init();
+		mui.plusReady(function() {
+			plus.screen.lockOrientation("portrait-primary");//仅支持竖屏显示
+			//刷新海报
+			loadimg("ad-warp",Host+"Images/WBimg/advertising.jpg?t="+new Date().getTime(),function(imgDom,src){
+				imgDom.style.backgroundImage="url("+src+")";
+			});
+			//更新版本
+			var progress=document.getElementById("progress");
+			var progressTip=document.getElementById("progress-tip");
+			new UpdateBiz(function(status,newVersion,gress){
+				switch (status){
+					case UpdateBiz.START_LOADING://关闭启动页,以显示下载进度
+						document.getElementById("update-info").style.display="block";
+						document.getElementById("ad-warp").style.display="none";
+						document.getElementById("newVersion").innerHTML=newVersion;
+						plus.navigator.closeSplashscreen();
+						break;
+					case UpdateBiz.LOADING://显示进度
+						progress.style.width=gress+"%";
+						progressTip.innerHTML=gress+"%";
+						break;
+					case UpdateBiz.SUCCESS:
+						plus.runtime.restart();//更新成功重启程序
+						break;
+					case UpdateBiz.END:
+						showAdImg();//没得更新或者最新完毕
+						break;
+				}
+			}).start();
+			
+			//显示当前版本号
+			plus.runtime.getProperty(plus.runtime.appid, function(inf) {
+				document.getElementById("curVersion").innerHTML=inf.version;
+			});
+			
+			//引导页6秒会自动关闭,如果此时还没检查到新版本,用户则可点此跳过
+			document.getElementById("pass").addEventListener("tap",function(){
+				isPass=true;
+				muiOpenWindow(mainPath,null,false,"none");
+			})
+			
+			//禁止右滑关闭
+			plus.webview.currentWebview().setStyle({'popGesture': 'none'});
+		});
+		
+		/*显示广告图*/
+		function showAdImg(){
+			//倒计时4秒
+			var t=4;
+			function timer(){
+				setTimeout(function() {
+					if (!isPass) {
+						t--;
+						if (t==0) {
+							//进入主页
+							muiOpenWindow(mainPath,null,false,"none");
+						}else{
+							pass.innerHTML="跳过"+t;
+							timer();
+						}
+					}
+				},1000);
+			}
+			timer();
+			//关闭启动页,以展示广告海报
+			plus.navigator.closeSplashscreen();
+		}
+	</script>
+
+</html>
