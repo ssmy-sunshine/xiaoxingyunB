@@ -1,0 +1,69 @@
+/*列表*/
+.tk-list{
+	padding-bottom: 12px;
+}
+.tk-list li{
+	position: relative;
+	margin: 14px 8px 0 8px;
+	padding: 10px 0;
+	background-image: url(http://www.yblbaby.net/wbwx/imgApp/ticket_bg.png);
+	background-size: 100% 100%;
+}
+/*左边*/
+.tk-list .tk-left{
+	display: inline-block;
+	width: 45%;
+	text-align: center;
+	vertical-align: middle;
+}
+.tk-list .tk-status{
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	font-size: 10px;
+	padding: 4px 12px;
+	border-radius: 12px;
+	background-color: #FF0050;
+	color: white;
+}
+.tk-list .tk-amount{
+	margin-top: 20px;
+	font-size: 30px;
+	color: #ff0050;
+	text-shadow: 1px 0 0 #ff0050;
+}
+.tk-list .tk-amount:before{
+	font-size: 20px;
+	text-shadow: none;
+}
+.tk-list .tk-term{
+	margin: 8px 0;
+	color: gray;
+}
+/*右边*/
+.tk-list .tk-right{
+	display: inline-block;
+	width: 55%;
+	text-align: center;
+	vertical-align: middle;
+}
+.tk-list .tk-name{
+	margin-top: 4px;
+}
+.tk-list .tk-mark{
+	font-size: 13px;
+	margin-top: 6px;
+	padding: 0 6px;
+}
+.tk-list .tk-date{
+	font-size: 12px;
+	margin-top: 10px;
+}
+/*变灰*/
+.tk-list .disabled .tk-status{
+	background-color: gray;
+}
+.tk-list .disabled .tk-amount{
+	color: gray;
+	text-shadow: none;
+}

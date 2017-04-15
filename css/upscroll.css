@@ -1,0 +1,60 @@
+/*
+ * 上拉加载的布局
+ * 
+<div id="upscroll" class="upscroll">
+	<div class="upscroll-content">
+		//内容内容
+	</div>
+	<div class="upscroll-footer">
+		<img class="upscroll-progress" src="../img/list_progress_circle.png"/>
+		<img class="upscroll-load-stutas" src="../img/list_header_info.png"/>
+	</div>
+</div>
+ */
+/*一个元素设置过position:absolute或position:relative后,再增加-webkit-overflow-scrolling: touch;滑动几次后可滚动区域会卡，不能在滑动，这时给元素增加个z-index值即可 http://www.bcty365.com/content-142-5250-1.html*/
+.upscroll{
+	z-index: 1;
+	height: 100%;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	background-color: white;
+}
+/*底部提示信息*/
+.upscroll-footer{
+	padding: 10px;
+	text-align: center;
+}
+.upscroll-load-stutas{
+	width: auto;
+	height: 26px;
+	vertical-align: middle;
+}
+/*旋转进度条*/
+.upscroll-progress{
+	width: 36px;
+	height: 36px;
+	vertical-align: middle;
+	-webkit-animation: anim_rotate 1.5s linear 0 infinite;
+}
+@-webkit-keyframes anim_rotate{
+	0% {
+		-webkit-transform:rotate(0deg);
+	}
+	100% {
+		-webkit-transform:rotate(360deg);
+	}
+}
+/*回到顶部的按钮*/
+.upscroll-totop{
+	z-index: 9990;
+	position: fixed;
+	right: 8px;
+	bottom: 20px;
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	background-color: rgba(0,0,0,.3);
+	border-radius: 50%;
+	color: white;
+}

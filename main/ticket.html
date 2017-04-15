@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<link rel="stylesheet" href="../fonts/iconfont.css">
+		<link rel="stylesheet" href="../css/app.css">
+		<link rel="stylesheet" href="../css/ticket-list.css">
+	</head>
+
+	<body>
+		<div class="wb-head">
+			<p class="wb-back iconfont icon-fanhui"></p>
+			<p class="wb-title">优惠券</p>
+		</div>
+		<div class="wb-content">
+			<ul class="tk-list">
+				<li>
+					<div class="tk-left">
+						<p class="tk-amount monery">10.00</p>
+						<p class="tk-term">满99可用</p>
+					</div><div class="tk-right">
+						<p class="tk-name">通用券</p>
+						<p class="tk-mark twoline">(饮料酒水除外)</p>
+						<p class="tk-date singleline">2017.04.20-2017.09.16</p>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+
+	<script src="../js/mui.min.js" charset="utf-8"></script>
+	<script src="../js/TempBiz.js" charset="utf-8"></script>
+	<script src="../js/DomBiz.js" charset="utf-8"></script>
+	<script src="../js/app.js" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		mui.init();
+		mui.plusReady(function() {
+			//选择10元券
+			$(".tk-list li").click(function(){
+				plus.webview.currentWebview().opener().evalJS("ticketCallBack()");
+				mui.back();
+			})
+		});
+	</script>
+
+</html>

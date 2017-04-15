@@ -62,26 +62,27 @@
 		<div class="wb-content">
 			<div class="input-warp">
 				<p class="input-left">总金额</p>
-				<input class="input-center" type="number" placeholder="请输入红包金额"/>
+				<input id="price" class="input-center" type="countber" placeholder="请输入红包金额"/>
 				<p class="input-right">元</p>
 			</div>
 			<div class="input-warp">
 				<p class="input-left">红包个数</p>
-				<input class="input-center" type="number" placeholder="请输入红包个数"/>
+				<input id="count" class="input-center" type="countber" placeholder="请输入红包个数"/>
 				<p class="input-right">个</p>
 			</div>
 			<div class="input-warp">
 				<p class="input-left">送积分</p>
-				<input class="input-center" type="number" placeholder="0"/>
+				<input id="score" class="input-center" type="countber" placeholder="0"/>
 				<p class="input-right">个</p>
 			</div>
-			<div class="input-warp">
+			<div class="input-warp tohref" href="../main/ticket.html" title="优惠券">
 				<p class="input-left">送优惠券</p>
+				<p id="ticketId" class="input-center"></p>
 				<p class="input-right iconfont icon-youjiantou"></p>
 			</div>
 			<div class="input-warp">
 				<p class="input-left">留 言</p>
-				<input class="remark input-center" type="number" placeholder="欢迎下次光临~"/>
+				<input id="remark" class="remark input-center" type="countber" placeholder="欢迎下次光临~"/>
 			</div>
 			<p class="price-all monery">0.00</p>
 			<p class="btn-send wb-btn btn-red">塞钱进红包</p>
@@ -94,67 +95,73 @@
 	<script src="../js/app.js" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
-		mui.ready(function() {//plusReady TODO
-			//获取传来的参数
-//			var value=plus.webview.currentWebview().key;
-			//联网获取数据
-//			getData(value);
+		mui.plusReady(function() {
 			
-			//点击事件
-//			$("#id").click(function(e) {
-//				var act=data[Number(this.getAttribute("i"))];
-//				var href = e.target.getAttribute("href");
-//				if (href=="toshare") {
-//					
-//				}else{
-//					
-//				}
-//			})
+			//发红包
+			$(".btn-send").click(function(){
+				//验证金额
+				var price=$("#price").val();
+				if (!price) {
+					mui.toast("请输入红包金额");
+					return;
+				}
+				price=countber(price);
+				if(price<0.1){
+					mui.toast("红包金额不能小于0.1");
+					return;
+				}
+				if(price>200){
+					mui.toast("红包金额不能大于200");
+					return;
+				}
+				//个数
+				var count=$("#count").val();
+				if (!count) {
+					mui.toast("请输入红包个数");
+					return;
+				}
+				count=countber(count);
+				//平均每人得到的金额
+				var ave=countber((price/count).toFixed(2));
+				if(ave<0.01){
+					mui.toast("每人要至少能抢到0.01");
+					$("#count").val("");
+					return;
+				}
+				//积分
+				var score=$("#score").val();
+				//优惠券
+				var ticketId=$("#ticketId").val();
+				if(ticketId) ticketId=5;//暂时写死
+				//留言
+				var remark=$("#remark").val();
+				
+				//发红包
+				sendRedPacket(price,count,score,ticketId,remark);
+			})
 		});
 		
-		/*联网获取数据*/
-//		function getData(orderId){
-//			//参数
-//			var param={"IFID":23,"PR":[[orderId],[orderId],[orderId]]};
-//			ajaxData(HostDataInV2, function(dataArr) {
-//				//返回数据
-//				var data=JSON.parse(dataArr[2]);
-//				//设置界面数据
-//				initView(data);
-//				
-//			},param);
-//		}
-
-		/*设置界面数据*/
-//		function initView(data) {
-//			var listDom=document.getElementById("upscroll-list");
-//			listDom.innerHTML="";
-//			for (var i = 0; i < data.length; i++) {
-//				var liData=data[i];
-				//拼接
-//				var str='';
-//				str+='';
-//				str+='';
-//				str+='';
-//				str+='';
-//				str+='';
-//				str+='';
-//				str+='';
-//				str+='';
-//				//加入
-//				var liDom=document.createElement("li");
-//				liDom.innerHTML=str;
-//				listDom.appendChild(liDom);
-//				//存入变量到li
-//				liDom.setAttribute("liID",liData.id);
-//				//li的点击事件
-//				liDom.addEventListener("tap",function() {
-//					var liID=this.getAttribute("liID");
-//					
-//				})
-//				
-//			}
-//		}
+		/*选择优惠券的回调*/
+		function ticketCallBack(){
+			$("#ticketId").html("5元通用券");
+		}
+		
+		/*发红包*/
+		function sendRedPacket(price,count,score,ticketId,remark){
+			var param={"money":price, "count":count, "score":score, "ticketId":ticketId, "tip":remark};
+			ajaxData(Host, function(data) {
+				//成功
+				mui.toast("发送成功");
+				//红包id
+				if(data&&data.id){
+					//跳转红包详情
+					openWindow("../main/redbag-detail.html","红包详情",{"id":data.id},true);
+				} else{
+					//跳转红包列表
+					openWindow("../main/redbag-list.html","红包列表",null,true);
+				}
+			},param);
+		}
 	</script>
 
 </html>
