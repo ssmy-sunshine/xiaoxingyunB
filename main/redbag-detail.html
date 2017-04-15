@@ -105,7 +105,7 @@
 		</div>
 		<div class="wb-content">
 			<div class="qrcode-warp">
-				<p class="monery">160.00</p>
+				<p class="monery">0.00</p>
 				<div id="qrcode" class="qrcode"></div>
 				<p class="printer">打印红包二维码</p>
 			</div>
@@ -140,7 +140,7 @@
 		mui.ready(function() {
 			//生成二维码图片
 			var qrDom=document.getElementById("qrcode");
-			new QRCode(qrDom, {text: "shareUrl", width: 140, height: 140});
+			new QRCode(qrDom, {text: "shareUrl", width: 160, height: 160});
 			
 		});
 		

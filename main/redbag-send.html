@@ -53,14 +53,14 @@
 				color: #E85045;
 			}
 			/*红包类型*/
-			.type-warp{
+			.taketype{
 				text-align: center;
 			}
-			.type-warp li{
+			.taketype li{
 				width: 30%;
 				display: inline-block;
 			}
-			.type-warp .select{
+			.taketype .select{
 				display: inline-block;
 				width: 20px;
 				height: 20px;
@@ -68,11 +68,11 @@
 				border: 1px solid #bbb;
 				border-radius: 50%;
 			}
-			.type-warp .tab-active .select{
+			.taketype .tab-active .select{
 				border: 1px solid #E85045;
 				background-color: #E85045;
 			}
-			.type-warp .tab-active{
+			.taketype .tab-active{
 				color: #E85045;
 			}
 			/*发送*/
@@ -100,7 +100,7 @@
 				<input id="count" class="input-center" type="Number" placeholder="请输入红包个数"/>
 				<p class="input-right">个</p>
 			</div>
-			<ul class="type-warp">
+			<ul class="taketype">
 				<li class="tab-active"><span class="select"></span><span>拼手气</span></li>
 				<li><span class="select"></span><span>平均分</span></li>
 			</ul>
@@ -131,10 +131,10 @@
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
 		mui.plusReady(function() {
-			var type=0;
-			//拼手气
-			initTabClick(".type-warp","li",function(i){
-				type=i;
+			//0拼手气;1平均分
+			var taketype=0;
+			initTabClick(".taketype","li",function(i){
+				taketype=i;
 			})
 			//金额监听
 			document.getElementById("price").addEventListener("input",function(){
@@ -196,7 +196,7 @@
 				var remark=$("#remark").val();
 				
 				//发红包
-				sendRedPacket(price,count,type,score,ticketId,remark);
+				sendRedPacket(price,count,taketype,score,ticketId,remark);
 			})
 		});
 		
@@ -207,20 +207,20 @@
 		}
 		
 		/*发红包*/
-		function sendRedPacket(price,count,type,score,ticketId,remark){
-			var param={"money":price, "count":count, "type":type, "score":score, "ticketId":ticketId, "tip":remark};
-//			ajaxData(Host, function(data) {
-//				//成功
-//				mui.toast("发送成功");
-//				//红包id
-//				if(data&&data.id){
-//					//跳转红包详情
-//					openWindow("../main/redbag-detail.html","红包详情",{"id":data.id},true);
-//				} else{
-//					//跳转红包列表
-//					openWindow("../main/redbag-list.html","红包列表",null,true);
-//				}
-//			},param);
+		function sendRedPacket(price,count,taketype,score,ticketId,remark){
+			var param={"money":price, "count":count, "busid":busid, "taketype":taketype, "score":score, "ticketId":ticketId, "remark":remark};
+			ajaxData(Host+"All?SL=RedPacket&SLM=create", function(data) {
+				//成功
+				mui.toast("发送成功");
+				//红包id
+				if(data&&data.no){
+					//跳转红包详情
+					openWindow("../main/redbag-detail.html","红包详情",{"no":data.no},true);
+				} else{
+					//跳转红包列表
+					openWindow("../main/redbag-list.html","红包列表",null,true);
+				}
+			},param);
 		}
 	</script>
 

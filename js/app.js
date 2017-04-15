@@ -1,7 +1,7 @@
 /*接口域名*/
 var isConsole=true;//TODO 是否输出,正式项目需改为false
-//var Host="http://www.yblbaby.net:800/";//测试项目服务器地址
-var Host="http://www.yblbaby.net:98/";//正式项目服务器地址
+var Host="http://192.168.1.103:8080/LittleLucky/";//测试项目服务器地址
+//var Host="http://192.168.1.103:8080/LittleLucky/";//正式项目服务器地址
 
 /*加载H5插件完成后的事件*/
 document.addEventListener("plusready", function() {
@@ -90,6 +90,7 @@ var UserObj={
 		tel = tel || UserObj.getTel();//手机号
 		pwMd5 = pwMd5 || UserObj.getPassword();//密码Md5
 		if (tel&&pwMd5) {
+			var param={tel:tel,pass:pwMd5};
 			ajaxData(Host+"DataInterface/WBAPP/WBAPPLogin.ashx", function(data) {
 					//Y§2§7C68D95F90ACCB8E150BB55E18A3BA93
 					//保存账户信息
@@ -99,7 +100,7 @@ var UserObj={
 					UserObj.setPassword(pwMd5);
 					//登录成功回调
 					success&&success();
-			},{Mnum:tel,pass:pwMd5},function(e) {
+			},param,function(e) {
 				//登录失败回调
 				err&&err(e);
 			},hideWait,false);
@@ -114,21 +115,21 @@ var UserObj={
 			callback&&callback();
 			return;
 		}
-		var param={"IFID":12,"PR":[[],[],[],[],[],[]]};
-		ajaxData(HostDataInV2, function(dataArr){
-			//{"T0":[{"UNickName":"xjkjh","3782":"/Images/WBimg/usericon-max.png","3780":"xjkjh的店铺","3785":0.00,"3789":116,"3784":0,"ShopImg":"/Images/WBimg/ShopHead.jpg","ShopID":174741,"RegisState":1,"IsTestUser":0,"UserType":"闪店主"}],"T1":[{"todayProfit":0.00}],"T2":[{"todayOrder":0}],"T3":[{"jdlNum":0}],"T4":[{"jrtjNum":0}],"T5":[{"yqsNum":0}]}
-			var data=JSON.parse(dataArr[2]);//设置用户信息
-			var user=data["T0"][0];
-			//先缓存变量,其他界面公用
-			UserObj.setIcon(user["3782"]);//头像
-			UserObj.setNickname(user.UNickName);//用户名
-			UserObj.setLevelName(user.UserType);//会员级别名称
-			UserObj.setTestTag(user.IsTestUser);//是否为测试人员,在updateBiz.js用到
-			//回调
-			callback&&callback(true);
-		},param,function(){
-			callback&&callback();
-		},true);
+//		var param={"IFID":12,"PR":[[],[],[],[],[],[]]};
+//		ajaxData(HostDataInV2, function(dataArr){
+//			//{"T0":[{"UNickName":"xjkjh","3782":"/Images/WBimg/usericon-max.png","3780":"xjkjh的店铺","3785":0.00,"3789":116,"3784":0,"ShopImg":"/Images/WBimg/ShopHead.jpg","ShopID":174741,"RegisState":1,"IsTestUser":0,"UserType":"闪店主"}],"T1":[{"todayProfit":0.00}],"T2":[{"todayOrder":0}],"T3":[{"jdlNum":0}],"T4":[{"jrtjNum":0}],"T5":[{"yqsNum":0}]}
+//			var data=JSON.parse(dataArr[2]);//设置用户信息
+//			var user=data["T0"][0];
+//			//先缓存变量,其他界面公用
+//			UserObj.setIcon(user["3782"]);//头像
+//			UserObj.setNickname(user.UNickName);//用户名
+//			UserObj.setLevelName(user.UserType);//会员级别名称
+//			UserObj.setTestTag(user.IsTestUser);//是否为测试人员,在updateBiz.js用到
+//			//回调
+//			callback&&callback(true);
+//		},param,function(){
+//			callback&&callback();
+//		},true);
 	}
 }
 
@@ -157,11 +158,8 @@ function getImgpath(imgpath){
  * param JSON参数 {key:value,key:value};默认带Uid和TK
  * err 错误回调
  * hideWait 不显示进度条(默认显示)
- * isParamKey 是否添加"param"这个key (默认添加)
- * paramJson 传参方式: 默认是flase,kv形式传参; true是json字符串形式传参;
- * dataJson 返回值类型: 默认是false,"§"解析的文本; true是标准的json字符串;
  */
-function ajaxData(url,success,param,err,hideWait,isParamKey,paramJson,dataJson) {
+function ajaxData(url,success,param,err,hideWait) {
 	//统一带参
 	param=param||{};
 	param["Uid"]=UserObj.getUid();
@@ -169,13 +167,6 @@ function ajaxData(url,success,param,err,hideWait,isParamKey,paramJson,dataJson) 
 	param["device"]=plus.device.model+" "+plus.os.version;//设备信息:iPhone 10.0.2; HUAWEI MT7-TL00 4.4.2
 	param["IMEI"]=plus.device.uuid;//设备号  1.7.7版本开始带入
 	param["version"]=localStorage.getItem("version");//版本号,在updateBiz.js中赋值; 1.5.5版本开始带入
-	
-	//无需登录状态的接口,需传key
-	if (url==HostDataQuery) param["Key"]="PlA5W8K_2ER-36a3E-37RT_35sj2Y66_R_L";
-	//isParamKey默认true,套一层param,参数格式为{param:jsonStr}
-	if (isParamKey!=false&&!param.param) {
-		param={"param":JSON.stringify(param)};
-	}
 	
 	/*封装请求,便于重试*/
 	function sendAjax(){
@@ -189,50 +180,29 @@ function ajaxData(url,success,param,err,hideWait,isParamKey,paramJson,dataJson) 
 		//显示进度条 默认显示hideWait==null或false
 		if(!hideWait) showWaiting();
 		//联网请求
-		var paramData = paramJson ? JSON.stringify(param) : param;//JSON字符串传参
 		mui.ajax(url,{
-			data:paramData,
+			data:param,
 			type:'post',
 			dataType:'text',//服务器返回的类型:文本
 			timeout:10000,//10秒超时
-			success:function(data){
-				isConsole&&console.log("请求url--> " + url + " 参数--> " + JSON.stringify(param) + " 结果-->" + data);
-				//请求数据
-				var res={
-					data:null,//真正的数据
-					isExpireTK:false,//登录状态是否过期
-					isErr:false,//是否报异常
-					errMsg:""//异常信息
-				};
-				if(dataJson){
-					// {"status":200,"msg":"success","data":0}
-					res.data = JSON.parse(data);
-					res.isExpireTK = (res.data.status==5001);
-					res.isErr = (res.data.status!=200);
-					if(res.isErr) res.errMsg = res.data.msg;
-				}else{
-					// Y/C/N§数据信息§DV2.0§0§2016/5/7 9:53:37
-					res.data = data.split("§");
-					res.isExpireTK = (res.data[0]=="C");
-					res.isErr = (res.data[0]=="N");
-					if(res.isErr) res.errMsg = res.data[1];
-				}
+			success:function(dataStr){
+				//{"Code":200,"Msg":{"no":633930},"SysTime":1492264267709}
+				isConsole&&console.log("请求url--> " + url + " 参数--> " + JSON.stringify(param) + " 结果-->" + dataStr);
 				//关闭进度条
 				if(!hideWait) plus.nativeUI.closeWaiting();
 				//处理请求结果
-				if (res.isExpireTK) {
-					//token过期 自动登录刷token //C§token证书错误，请重新登陆！§WBAPPData_IN§0§2016/4/25 10:37:10
+				var data=JSON.parse(dataStr);
+				if(data.Code==200){
+					//请求成功回调
+					success&&success(data.Msg,data.SysTime);
+				}else if(data.Code==5003){
+					//token过期 自动登录刷token
 					if(!window.isGetTK){
 						//一个界面只许刷一次token,避免多个请求同时刷token导致死循环
 						window.isGetTK=true;
 						UserObj.login(null,null,function() {
 							//登录成功更新TK
 							param.TK=UserObj.getTK();;
-							if (param.param) {
-								var paramObj=JSON.parse(param.param);
-								paramObj.TK=param.TK;
-								param.param=JSON.stringify(paramObj);
-							}
 							sendAjax();//登录成功继续请求
 						},function (){
 							window.isGetTK=false;
@@ -242,26 +212,14 @@ function ajaxData(url,success,param,err,hideWait,isParamKey,paramJson,dataJson) 
 						setTimeout(function(){
 							//isGetTK=true;其他请求已刷过TK;则更新TK,继续请求,重新请求3次
 							param.TK=UserObj.getTK();;
-							if (param.param) {
-								var paramObj=JSON.parse(param.param);
-								paramObj.TK=param.TK;
-								param.param=JSON.stringify(paramObj);
-							}
 							sendAjax();
 						},3000)
 					}
-				} else if(res.isErr) {
-					//N§异常信息§DV2.0§0§2016/5/7 9:53:37
-					var noToastErr=err&&err(res.data);//错误回调 返回true则不提示异常
+				}else{
+					//请求异常
+					var noToastErr=err&&err(data);//错误回调 返回true则不提示异常
 					if (noToastErr!=true) {
-						mui.toast(res.errMsg+" v"+param.version);
-					}
-				} else{
-					//请求成功回调;token不过期,无异常
-					if(dataJson){
-						success&&success(res.data.data,res.data);//直接返回真正的数据对象
-					}else{
-						success&&success(res.data);
+						mui.toast(data.Msg+" v"+param.version);
 					}
 				}
 			},
