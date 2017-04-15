@@ -30,7 +30,11 @@
 			.input-warp .input-center{
 				width: 100%;
 				padding: 15px 40px 15px 0;
+				background-color: transparent;
 				text-align: right;
+			}
+			.input-warp .ticketId{
+				padding-right: 48px;
 			}
 			.input-warp .input-right{
 				position: absolute;
@@ -38,14 +42,40 @@
 				right: 0;
 				padding: 17px 12px;
 			}
-			.input-warp .remark{
-				padding: 11px 16px;
-			}
 			.price-all{
 				font-size: 40px;
 				margin: 40px 0;
 				text-align: center;
 			}
+			.delticket{
+				z-index: 99;
+				background-color: #eee;
+				color: #E85045;
+			}
+			/*红包类型*/
+			.type-warp{
+				text-align: center;
+			}
+			.type-warp li{
+				width: 30%;
+				display: inline-block;
+			}
+			.type-warp .select{
+				display: inline-block;
+				width: 20px;
+				height: 20px;
+				margin-right: 8px;
+				border: 1px solid #bbb;
+				border-radius: 50%;
+			}
+			.type-warp .tab-active .select{
+				border: 1px solid #E85045;
+				background-color: #E85045;
+			}
+			.type-warp .tab-active{
+				color: #E85045;
+			}
+			/*发送*/
 			.btn-send{
 				width: 90%;
 				margin: 5px 5%;
@@ -62,29 +92,34 @@
 		<div class="wb-content">
 			<div class="input-warp">
 				<p class="input-left">总金额</p>
-				<input id="price" class="input-center" type="countber" placeholder="请输入红包金额"/>
+				<input id="price" class="input-center" type="Number" placeholder="请输入红包金额"/>
 				<p class="input-right">元</p>
 			</div>
 			<div class="input-warp">
 				<p class="input-left">红包个数</p>
-				<input id="count" class="input-center" type="countber" placeholder="请输入红包个数"/>
+				<input id="count" class="input-center" type="Number" placeholder="请输入红包个数"/>
 				<p class="input-right">个</p>
 			</div>
+			<ul class="type-warp">
+				<li class="tab-active"><span class="select"></span><span>拼手气</span></li>
+				<li><span class="select"></span><span>平均分</span></li>
+			</ul>
 			<div class="input-warp">
 				<p class="input-left">送积分</p>
-				<input id="score" class="input-center" type="countber" placeholder="0"/>
+				<input id="score" class="input-center" type="Number" placeholder="0"/>
 				<p class="input-right">个</p>
 			</div>
 			<div class="input-warp tohref" href="../main/ticket.html" title="优惠券">
 				<p class="input-left">送优惠券</p>
-				<p id="ticketId" class="input-center"></p>
+				<p id="ticketId" class="ticketId input-center"></p>
 				<p class="input-right iconfont icon-youjiantou"></p>
+				<p class="delticket input-right iconfont icon-guanbi hide"></p>
 			</div>
 			<div class="input-warp">
 				<p class="input-left">留 言</p>
-				<input id="remark" class="remark input-center" type="countber" placeholder="欢迎下次光临~"/>
+				<input id="remark" class="remark input-center" type="Number" placeholder="欢迎下次光临~"/>
 			</div>
-			<p class="price-all monery">0.00</p>
+			<p id="priceAll" class="price-all monery">0.00</p>
 			<p class="btn-send wb-btn btn-red">塞钱进红包</p>
 		</div>
 	</body>
@@ -96,7 +131,31 @@
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
 		mui.plusReady(function() {
-			
+			var type=0;
+			//拼手气
+			initTabClick(".type-warp","li",function(i){
+				type=i;
+			})
+			//金额监听
+			document.getElementById("price").addEventListener("input",function(){
+				var price=this.value||0;
+				price=Number(price);
+				if (price>0) {
+					if(price>200){
+						price=200;
+						this.value=200;
+					}
+					$("#priceAll").html(price.toFixed(2));
+				} else{
+					$("#priceAll").html("");
+				}
+			})
+			//不选择券
+			$(".delticket").click(function(e){
+				e.stopPropagation();
+				$("#ticketId").html("");
+				$(this).hide();
+			})
 			//发红包
 			$(".btn-send").click(function(){
 				//验证金额
@@ -105,7 +164,7 @@
 					mui.toast("请输入红包金额");
 					return;
 				}
-				price=countber(price);
+				price=Number(price);
 				if(price<0.1){
 					mui.toast("红包金额不能小于0.1");
 					return;
@@ -120,9 +179,9 @@
 					mui.toast("请输入红包个数");
 					return;
 				}
-				count=countber(count);
+				count=Number(count);
 				//平均每人得到的金额
-				var ave=countber((price/count).toFixed(2));
+				var ave=Number((price/count).toFixed(2));
 				if(ave<0.01){
 					mui.toast("每人要至少能抢到0.01");
 					$("#count").val("");
@@ -131,24 +190,25 @@
 				//积分
 				var score=$("#score").val();
 				//优惠券
-				var ticketId=$("#ticketId").val();
-				if(ticketId) ticketId=5;//暂时写死
+				var ticketId=$("#ticketId").html();
+				if(ticketId) ticketId=10;//暂时写死
 				//留言
 				var remark=$("#remark").val();
 				
 				//发红包
-				sendRedPacket(price,count,score,ticketId,remark);
+				sendRedPacket(price,count,type,score,ticketId,remark);
 			})
 		});
 		
 		/*选择优惠券的回调*/
 		function ticketCallBack(){
-			$("#ticketId").html("5元通用券");
+			$("#ticketId").html("10元通用券");
+			$(".delticket").show(true);
 		}
 		
 		/*发红包*/
-		function sendRedPacket(price,count,score,ticketId,remark){
-			var param={"money":price, "count":count, "score":score, "ticketId":ticketId, "tip":remark};
+		function sendRedPacket(price,count,type,score,ticketId,remark){
+			var param={"money":price, "count":count, "type":type, "score":score, "ticketId":ticketId, "tip":remark};
 			ajaxData(Host, function(data) {
 				//成功
 				mui.toast("发送成功");

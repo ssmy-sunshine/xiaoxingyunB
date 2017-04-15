@@ -10,17 +10,60 @@
 		<link rel="stylesheet" href="../fonts/iconfont.css">
 		<link rel="stylesheet" href="../css/app.css">
 		<style type="text/css">
-			
+			.redbag-list li{
+				position: relative;
+				padding: 24px 12px;
+				border-bottom: 1px solid #eee;
+			}
+			.redbag-list .icon-hongbao{
+				font-size: 45px;
+				color: #E85045;
+			}
+			.redbag-list .price{
+				position: absolute;
+				top: 38%;
+				left: 64px;
+				font-size: 24px;
+				color: #E85045;
+			}
+			.redbag-list .count{
+				position: absolute;
+				top: 16px;
+				right: 36px;
+				font-size: 14px;
+				color: gray;
+			}
+			.redbag-list .date{
+				position: absolute;
+				bottom: 8px;
+				right: 36px;
+				font-size: 12px;
+				color: gray;
+			}
+			.redbag-list .icon-youjiantou{
+				position: absolute;
+				top: 38%;
+				right: 10px;
+				color: gray;
+			}
 		</style>
 	</head>
 
 	<body>
 		<div class="wb-head">
 			<p class="wb-back iconfont icon-fanhui"></p>
-			<p class="wb-title">红包列表</p>
+			<p class="wb-title">红包记录</p>
 		</div>
 		<div class="wb-content">
-			
+			<ul class="redbag-list">
+				<!--<li>
+					<p class="iconfont icon-hongbao"></p>
+					<p class="price monery">1.00</p>
+					<p class="count">2个 拼手气</p>
+					<p class="date">2017-4-15 15:41:41</p>
+					<p class="iconfont icon-youjiantou"></p>
+				</li>-->
+			</ul>
 		</div>
 	</body>
 
@@ -32,7 +75,9 @@
 		mui.init();
 		mui.plusReady(function() {
 			
-			
+//			$(".redbag-list li").click(function  () {
+//				openWindow("../main/redbag-detail.html")
+//			})
 		});
 		
 	</script>

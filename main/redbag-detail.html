@@ -10,7 +10,91 @@
 		<link rel="stylesheet" href="../fonts/iconfont.css">
 		<link rel="stylesheet" href="../css/app.css">
 		<style type="text/css">
-			
+			.wb-content{
+				text-align: center;
+			}
+			.qrcode-warp{
+				position: relative;
+				display: inline-block;
+				width: 280px;
+				height: 280px;
+				padding: 60px;
+				border-radius: 50%;
+				background-color: #E85045;
+				margin: 20px 0;
+				color: white;
+			}
+			.qrcode-warp .monery{
+				position: absolute;
+				top: 25px;
+				left: 0;
+				width: 100%;
+				font-size: 28px;
+			}
+			.qrcode-warp .printer{
+				position: absolute;
+				bottom: 28px;
+				left: 0;
+				width: 100%;
+				padding: 0 50px;
+			}
+			.qrcode-warp .qrcode{
+				width: 160px;
+				height: 160px;
+				box-shadow: 1px 1px 10px black;
+			}
+			.redbag-info li{
+				font-size: 14px;
+				padding: 6px 12px;
+				text-align: left;
+			}
+			/*领取明细*/
+			.takeline{
+				width: 80%;
+				margin-top: 24px;
+				margin-left: 10%;
+				height: 1px;
+				background-color: #eee;
+			}
+			.taketitle{
+				position: relative;
+				top: -10px;
+				display: inline-block;
+				width: 120px;
+				font-size: 12px;
+				background-color: white;
+				text-align: center;
+			}
+			.takelist li{
+				position: relative;
+				padding: 10px 12px;
+				text-align: left;
+				border-bottom: 1px solid #eee;
+			}
+			.takelist .takeicon{
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				vertical-align: middle;
+			}
+			.takelist .takename{
+				font-size: 14px;
+				margin-left: 8px;
+				vertical-align: middle;
+			}
+			.takelist .takemoney{
+				position: absolute;
+				top: 15px;
+				right: 12px;
+				color: #FE2D66;
+			}
+			.takelist .taketime{
+				position: absolute;
+				right: 12px;
+				bottom: 2px;
+				font-size: 12px;
+				color: gray;
+			}
 		</style>
 	</head>
 
@@ -20,18 +104,43 @@
 			<p class="wb-title">红包明细</p>
 		</div>
 		<div class="wb-content">
-			
+			<div class="qrcode-warp">
+				<p class="monery">160.00</p>
+				<div id="qrcode" class="qrcode"></div>
+				<p class="printer">打印红包二维码</p>
+			</div>
+			<ul class="redbag-info">
+				<li><span>红包金额:</span> <span class="pink"></span></li>
+				<li><span>红包个数:</span> <span class="pink"></span></li>
+				<li><span>送积分:</span> <span class="pink"></span></li>
+				<li><span>送优惠券:</span> <span class="pink"></span></li>
+				<li><span>留言:</span> <span></span></li>
+				<li><span>时间:</span> <span></span></li>
+			</ul>
+			<p class="takeline"></p>
+			<p class="taketitle gray">红包领取明细 <span class="pink">( 0 / 0 )</span></p>
+			<ul class="takelist">
+				<!--<li>
+					<img class="takeicon" src="../img/logo.png"/>
+					<span class="takename">昵称</span>
+					<span class="takemoney">0.01</span>
+					<span class="taketime">2017-4-15 15:19:44</span>
+				</li>-->
+			</ul>
 		</div>
 	</body>
 
 	<script src="../js/mui.min.js" charset="utf-8"></script>
 	<script src="../js/TempBiz.js" charset="utf-8"></script>
 	<script src="../js/DomBiz.js" charset="utf-8"></script>
+	<script src="../js/qrcode.min.js" charset="utf-8"></script>
 	<script src="../js/app.js" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
-		mui.plusReady(function() {
-			
+		mui.ready(function() {
+			//生成二维码图片
+			var qrDom=document.getElementById("qrcode");
+			new QRCode(qrDom, {text: "shareUrl", width: 140, height: 140});
 			
 		});
 		
