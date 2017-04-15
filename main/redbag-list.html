@@ -9,6 +9,7 @@
 
 		<link rel="stylesheet" href="../fonts/iconfont.css">
 		<link rel="stylesheet" href="../css/app.css">
+		<link rel="stylesheet" href="../css/upscroll.css">
 		<style type="text/css">
 			.redbag-list li{
 				position: relative;
@@ -54,32 +55,39 @@
 			<p class="wb-back iconfont icon-fanhui"></p>
 			<p class="wb-title">红包记录</p>
 		</div>
-		<div class="wb-content">
-			<ul class="redbag-list">
-				<!--<li>
-					<p class="iconfont icon-hongbao"></p>
-					<p class="price monery">1.00</p>
-					<p class="count">2个 拼手气</p>
-					<p class="date">2017-4-15 15:41:41</p>
-					<p class="iconfont icon-youjiantou"></p>
-				</li>-->
-			</ul>
+		<div id="upscroll" class="wb-content upscroll">
+			<div class="upscroll-content">
+				<ul class="redbag-list upscroll-list">
+					<!--<li>
+						<p class="iconfont icon-hongbao"></p>
+						<p class="price monery">1.00</p>
+						<p class="count">2个 拼手气</p>
+						<p class="date">2017-4-15 15:41:41</p>
+						<p class="iconfont icon-youjiantou"></p>
+					</li>-->
+				</ul>
+			</div>
 		</div>
 	</body>
 
 	<script src="../js/mui.min.js" charset="utf-8"></script>
 	<script src="../js/TempBiz.js" charset="utf-8"></script>
 	<script src="../js/DomBiz.js" charset="utf-8"></script>
+	<script src="../js/upscroll.js" charset="utf-8"></script>
 	<script src="../js/app.js" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
 		mui.plusReady(function() {
-			
+			var upScroll=new UpScroll("upscroll",getData);
 //			$(".redbag-list li").click(function  () {
 //				openWindow("../main/redbag-detail.html")
 //			})
 		});
 		
+		/*加载列表数据*/
+		function getData(){
+			
+		}
 	</script>
 
 </html>

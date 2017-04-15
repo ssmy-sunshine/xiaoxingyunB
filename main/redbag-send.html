@@ -117,7 +117,7 @@
 			</div>
 			<div class="input-warp">
 				<p class="input-left">留 言</p>
-				<input id="remark" class="remark input-center" type="Number" placeholder="欢迎下次光临~"/>
+				<input id="remark" class="remark input-center" type="text" placeholder="欢迎下次光临~"/>
 			</div>
 			<p id="priceAll" class="price-all monery">0.00</p>
 			<p class="btn-send wb-btn btn-red">塞钱进红包</p>
@@ -209,18 +209,18 @@
 		/*发红包*/
 		function sendRedPacket(price,count,type,score,ticketId,remark){
 			var param={"money":price, "count":count, "type":type, "score":score, "ticketId":ticketId, "tip":remark};
-			ajaxData(Host, function(data) {
-				//成功
-				mui.toast("发送成功");
-				//红包id
-				if(data&&data.id){
-					//跳转红包详情
-					openWindow("../main/redbag-detail.html","红包详情",{"id":data.id},true);
-				} else{
-					//跳转红包列表
-					openWindow("../main/redbag-list.html","红包列表",null,true);
-				}
-			},param);
+//			ajaxData(Host, function(data) {
+//				//成功
+//				mui.toast("发送成功");
+//				//红包id
+//				if(data&&data.id){
+//					//跳转红包详情
+//					openWindow("../main/redbag-detail.html","红包详情",{"id":data.id},true);
+//				} else{
+//					//跳转红包列表
+//					openWindow("../main/redbag-list.html","红包列表",null,true);
+//				}
+//			},param);
 		}
 	</script>
 
