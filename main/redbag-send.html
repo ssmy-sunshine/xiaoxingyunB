@@ -208,14 +208,14 @@
 		
 		/*发红包*/
 		function sendRedPacket(price,count,taketype,score,ticketId,remark){
-			var param={"money":price, "count":count, "busid":busid, "taketype":taketype, "score":score, "ticketId":ticketId, "remark":remark};
+			var param={"money":price, "count":count, "taketype":taketype, "score":score, "ticketId":ticketId, "remark":remark};
 			ajaxData(Host+"All?SL=RedPacket&SLM=create", function(data) {
 				//成功
 				mui.toast("发送成功");
 				//红包id
-				if(data&&data.no){
+				if(data&&data.pass){
 					//跳转红包详情
-					openWindow("../main/redbag-detail.html","红包详情",{"no":data.no},true);
+					openWindow("../main/redbag-detail.html","红包详情",{"pass":data.pass},true);
 				} else{
 					//跳转红包列表
 					openWindow("../main/redbag-list.html","红包列表",null,true);

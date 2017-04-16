@@ -65,6 +65,16 @@
 				background-color: white;
 				text-align: center;
 			}
+			.reload-detail{
+				margin-top: -35px;
+				font-size: 13px;
+				padding: 8px;
+				text-align: right;
+				color: #1CACEB;
+			}
+			.takelist{
+				padding-bottom: 40px;
+			}
 			.takelist li{
 				position: relative;
 				padding: 10px 12px;
@@ -92,7 +102,7 @@
 				position: absolute;
 				right: 12px;
 				bottom: 2px;
-				font-size: 12px;
+				font-size: 13px;
 				color: gray;
 			}
 		</style>
@@ -105,21 +115,22 @@
 		</div>
 		<div class="wb-content">
 			<div class="qrcode-warp">
-				<p class="monery">0.00</p>
+				<p class="totalmoney monery">0.00</p>
 				<div id="qrcode" class="qrcode"></div>
 				<p class="printer">打印红包二维码</p>
 			</div>
 			<ul class="redbag-info">
-				<li><span>红包金额:</span> <span class="pink"></span></li>
-				<li><span>红包个数:</span> <span class="pink"></span></li>
-				<li><span>送积分:</span> <span class="pink"></span></li>
-				<li><span>送优惠券:</span> <span class="pink"></span></li>
-				<li><span>留言:</span> <span></span></li>
-				<li><span>时间:</span> <span></span></li>
+				<li><span>红包金额:</span> <span class="totalmoney pink"></span></li>
+				<li><span>红包个数:</span> <span class="count pink"></span></li>
+				<li><span>送积分:</span> <span id="score" class="pink"></span></li>
+				<li><span>送优惠券:</span> <span id="ticketId" class="pink"></span></li>
+				<li><span>留言:</span> <span id="remark"></span></li>
+				<li><span>时间:</span> <span id="createtime"></span></li>
 			</ul>
 			<p class="takeline"></p>
-			<p class="taketitle gray">红包领取明细 <span class="pink">( 0 / 0 )</span></p>
-			<ul class="takelist">
+			<p class="taketitle gray">红包领取明细 <span class="pink">( <span id="takecount">0</span> / <span class="count">0</span> )</span></p>
+			<p class="reload-detail">刷新</p>
+			<ul id="takelist" class="takelist">
 				<!--<li>
 					<img class="takeicon" src="../img/logo.png"/>
 					<span class="takename">昵称</span>
@@ -137,12 +148,61 @@
 	<script src="../js/app.js" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
-		mui.ready(function() {
+		mui.plusReady(function() {
+			//口令
+			var pass=plus.webview.currentWebview().pass;
 			//生成二维码图片
 			var qrDom=document.getElementById("qrcode");
-			new QRCode(qrDom, {text: "shareUrl", width: 160, height: 160});
-			
+			var takeUrl=Host+"wxweb/take.html?pass="+pass;
+			new QRCode(qrDom, {text: takeUrl, width: 160, height: 160});
+			//查询红包明细
+			getRedbagDetail(pass);
+			//查询领取明细
+			getTakeDetail(pass);
+			//刷新
+			$(".reload-detail").click(function () {
+				getTakeDetail(pass);
+			})
 		});
+		
+		/*查询红包明细*/
+		function getRedbagDetail(pass){
+			var param={"pass":pass};
+			ajaxData(Host+"All?SL=RedPacket&SLM=getdetail", function(data) {
+				$(".totalmoney").html(data.money.toFixed(2));
+				$(".count").html(data.count);
+				$("#score").html(data.score);
+				$("#ticketId").html(data.ticketId);
+				$("#remark").html(data.remark);
+				$("#createtime").html(data.createtime);
+			},param);
+		}
+		
+		/*查询领取明细*/
+		function getTakeDetail(pass){
+			var param={"pass":pass};
+			ajaxData(Host+"All?SL=RedPacket&SLM=takedetail", function(data) {
+				var takelist=document.getElementById("takelist");
+				var len=data.length;
+				if (len==0) {
+					new EmptyBox("暂没有人领取~").show(takelist,"0px");
+				} else{
+					//明细列表
+					$("#takecount").html(len);
+					var str='';
+					for (var i = 0; i < len; i++) {
+						var detail=data[i];
+						str+='<li>';
+						str+='<img class="takeicon" src="../img/logo.png" data-src="'+getImgpath(detail.usericon)+'" onload="loadimg(this)"/>';
+						str+='<span class="takename">'+detail.nickname+'</span>';
+						str+='<span class="takemoney">'+detail.money+'</span>';
+						str+='<span class="taketime">'+detail.taketime+'</span>';
+						str+='</li>';
+					}
+					takelist.innerHTML=str;
+				}
+			},param);
+		}
 		
 	</script>
 

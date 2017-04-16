@@ -13,23 +13,23 @@
 		<style type="text/css">
 			.redbag-list li{
 				position: relative;
-				padding: 24px 12px;
+				padding: 25px 12px;
 				border-bottom: 1px solid #eee;
 			}
 			.redbag-list .icon-hongbao{
-				font-size: 45px;
+				font-size: 50px;
 				color: #E85045;
 			}
 			.redbag-list .price{
 				position: absolute;
 				top: 38%;
-				left: 64px;
-				font-size: 24px;
+				left: 66px;
+				font-size: 25px;
 				color: #E85045;
 			}
 			.redbag-list .count{
 				position: absolute;
-				top: 16px;
+				top: 18px;
 				right: 36px;
 				font-size: 14px;
 				color: gray;
@@ -76,17 +76,59 @@
 	<script src="../js/upscroll.js" charset="utf-8"></script>
 	<script src="../js/app.js" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
+		var upScroll;
+	
 		mui.init();
 		mui.plusReady(function() {
-			var upScroll=new UpScroll("upscroll",getData);
-//			$(".redbag-list li").click(function  () {
-//				openWindow("../main/redbag-detail.html")
-//			})
+			upScroll=new UpScroll("upscroll",getData);
 		});
 		
 		/*加载列表数据*/
-		function getData(){
-			
+		function getData(pg){
+			var param={"no":pg.no, "size":pg.size};
+			ajaxData(Host+"All?SL=RedPacket&SLM=getlist", function(data) {
+				try{
+					//必须先隐藏上拉加载的状态
+					var isEmpty=upScroll.endSuccess(data.length);
+					if (isEmpty) {
+						new EmptyBox().show(upScroll.upscrollList);
+					}else{
+						//再设置数据
+						setData(data);
+					}
+				}catch(e){
+					upScroll.endErr();//解析异常,隐藏上拉加载的状态
+				}
+			}, param ,function() {
+				upScroll.endErr();//联网异常,隐藏上拉加载的状态
+			},true);//无需进度条
+		}
+		
+		/*设置列表数据*/
+		function setData(data){
+			var listDom=upScroll.upscrollList;
+			for (var i = 0; i < data.length; i++) {
+				var liData=data[i];
+				//拼接
+				var str='';
+				str+='<p class="iconfont icon-hongbao"></p>';
+				str+='<p class="price monery">'+liData.money+'</p>';
+				str+='<p class="count">'+liData.count+'个 '+liData.taketypetip+'</p>';
+				str+='<p class="date">'+liData.createtime+'</p>';
+				str+='<p class="iconfont icon-youjiantou"></p>';
+				//加入
+				var liDom=document.createElement("li");
+				liDom.innerHTML=str;
+				listDom.appendChild(liDom);
+				//存入变量到li
+				liDom.setAttribute("pass",liData.pass);
+				//li的点击事件
+				liDom.addEventListener("tap",function() {
+					var pass=this.getAttribute("pass");
+					//跳转红包详情
+					openWindow("../main/redbag-detail.html","红包详情",{"pass":pass});
+				})
+			}
 		}
 	</script>
 
