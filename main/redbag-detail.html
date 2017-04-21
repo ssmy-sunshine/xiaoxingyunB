@@ -153,7 +153,7 @@
 			var pass=plus.webview.currentWebview().pass;
 			//生成二维码图片
 			var qrDom=document.getElementById("qrcode");
-			var takeUrl=Host+"wxweb/take.html?pass="+pass;
+			var takeUrl=Host+"wxweb/takebag.html?pass="+pass;
 			new QRCode(qrDom, {text: takeUrl, width: 160, height: 160});
 			//查询红包明细
 			getRedbagDetail(pass);

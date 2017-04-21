@@ -123,7 +123,8 @@
 	<script src="../js/app.js" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		mui.init();
-		mui.ready(function() {//plusReady TODO
+		mui.plusReady(function() {
+			plus.screen.lockOrientation("portrait-primary");//仅支持竖屏显示
 			//获取传来的参数
 //			var value=plus.webview.currentWebview().key;
 			//联网获取数据

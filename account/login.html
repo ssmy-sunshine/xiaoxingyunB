@@ -20,16 +20,16 @@
 			<div class="input-warp">
 				<div class="input-item">
 					<p class="input-left iconfont icon-dianhua"></p>
-					<input id="tel" class="input-center" type="number" placeholder="输入手机号" />
-					<p id="telDel" class="input-right iconfont icon-guanbi hide"></p>
+					<input id="tel" class="input-center" type="number" placeholder="输入手机号" value="13666666666"/>
+					<p id="telDel" class="input-right iconfont icon-guanbi"></p>
 				</div>
 				<div class="input-item">
 					<p class="input-left iconfont icon-mima"></p>
-					<input id="password" class="input-center" type="password" placeholder="输入密码" />
+					<input id="password" class="input-center" type="password" placeholder="输入密码"  value="123456"/>
 					<p id="passwordDel" class="input-right iconfont icon-guanbi hide"></p>
 				</div>
 			</div>
-			<p id="btnSubmit" class="btn-submit wb-btn btn-gray btn-radius">进入小幸运</p>
+			<p id="btnSubmit" class="btn-submit wb-btn btn-red btn-radius">进入小幸运</p>
 		</div>
 		<img class="login-bg-2" src="http://www.yblbaby.net/wbwx/imgApp/login-bg-2.png"/>
 	</body>
@@ -100,21 +100,21 @@
 			
 			//登录
 			$("#btnSubmit").click(function() {
-				var tel=$("#tel").val();
-				if (!isTel(tel)) {
-					mui.toast("手机号不正确");
-					return;
-				}
-				var pass=$("#password").val();
-				if (pass.length<6) {
-					mui.toast("密码至少6位");
-					return;
-				}
-				//登录
-				UserObj.login(tel,md5(pass),function() {
+//				var tel=$("#tel").val();
+//				if (!isTel(tel)) {
+//					mui.toast("手机号不正确");
+//					return;
+//				}
+//				var pass=$("#password").val();
+//				if (pass.length<6) {
+//					mui.toast("密码至少6位");
+//					return;
+//				}
+//				//登录
+//				UserObj.login(tel,md5(pass),function() {
 					//跳转主页
 					openWindow("../main/main.html");
-				});
+//				});
 				
 			})
 			
