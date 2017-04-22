@@ -194,8 +194,8 @@
 						var detail=data[i];
 						str+='<li>';
 						str+='<img class="takeicon" src="../img/logo.png" data-src="'+getImgpath(detail.usericon)+'" onload="loadimg(this)"/>';
-						str+='<span class="takename">'+detail.nickname+'</span>';
-						str+='<span class="takemoney">'+detail.money+'</span>';
+						str+='<span class="takename">'+(detail.takeuser.substr(0,3)+"**"+detail.takeuser.substr(detail.takeuser.length-3,3))+'</span>';
+						str+='<span class="takemoney">'+detail.money.toFixed(2)+'</span>';
 						str+='<span class="taketime">'+detail.taketime+'</span>';
 						str+='</li>';
 					}
