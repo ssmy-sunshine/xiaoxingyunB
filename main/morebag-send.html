@@ -78,7 +78,7 @@
 			/*发送*/
 			.btn-send{
 				width: 90%;
-				margin: 5px 5%;
+				margin: 35px 5% 0 5%;
 				border-radius: 5px;
 			}
 		</style>
@@ -87,12 +87,12 @@
 	<body>
 		<div class="wb-head">
 			<p class="wb-back iconfont icon-fanhui"></p>
-			<p class="wb-title">发普通红包</p>
+			<p class="wb-title">裂变红包</p>
 		</div>
 		<div class="wb-content">
 			<div class="input-warp">
 				<p class="input-left">总金额</p>
-				<input id="price" class="input-center" type="Number" placeholder="请输入红包金额"/>
+				<input id="price" class="input-center" type="number" placeholder="请输入红包金额"/>
 				<p class="input-right">元</p>
 			</div>
 			<div class="input-warp">
@@ -115,16 +115,21 @@
 				<p class="input-right iconfont icon-youjiantou"></p>
 				<p class="delticket input-right iconfont icon-guanbi hide"></p>
 			</div>
-			<div class="input-warp tohref" href="../main/morebag-send.html?morebagCallBack=true" title="裂变红包">
-				<p class="input-left">添加裂变红包</p>
-				<p id="moremoney" class="moremoney input-center"></p>
-				<p class="input-right iconfont icon-youjiantou"></p>
-			</div>
 			<div class="input-warp">
 				<p class="input-left">留 言</p>
 				<input id="remark" class="remark input-center" type="text" placeholder="欢迎下次光临~"/>
 			</div>
-			<p id="priceAll" class="price-all monery">0.00</p>
+			<div class="input-warp">
+				<p class="input-left">好友领取奖励邀请人</p>
+				<input id="profit" class="input-center" type="Number" placeholder="0"/>
+				<p class="input-right">元</p>
+			</div>
+			<div class="input-warp">
+				<p class="input-left">最多奖励邀请人</p>
+				<input id="maxprofit" class="input-center" type="Number" placeholder="0"/>
+				<p class="input-right">元</p>
+			</div>
+			<!--<p id="priceAll" class="price-all monery">0.00</p>-->
 			<p class="btn-send wb-btn btn-red">塞钱进红包</p>
 		</div>
 	</body>
@@ -142,19 +147,19 @@
 				taketype=i;
 			})
 			//金额监听
-			document.getElementById("price").addEventListener("input",function(){
-				var price=this.value||0;
-				price=Number(price);
-				if (price>0) {
-					if(price>200){
-						price=200;
-						this.value=200;
-					}
-					$("#priceAll").html(price.toFixed(2));
-				} else{
-					$("#priceAll").html("");
-				}
-			})
+//			document.getElementById("price").addEventListener("input",function(){
+//				var price=this.value||0;
+//				price=Number(price);
+//				if (price>0) {
+//					if(price>200){
+//						price=200;
+//						this.value=200;
+//					}
+//					$("#priceAll").html(price.toFixed(2));
+//				} else{
+//					$("#priceAll").html("");
+//				}
+//			})
 			//不选择券
 			$(".delticket").click(function(e){
 				e.stopPropagation();
@@ -184,6 +189,18 @@
 					mui.toast("请输入红包个数");
 					return;
 				}
+				//利润
+				var profit=$("#profit").val();
+				if (!profit) {
+					mui.toast("输入邀请人奖励金额");
+					return;
+				}
+				//最多利润
+				var maxprofit=$("#maxprofit").val();
+				if (!maxprofit) {
+					mui.toast("输入邀请人最多奖励金额");
+					return;
+				}
 				count=Number(count);
 				//平均每人得到的金额
 				var ave=Number((price/count).toFixed(2));
@@ -197,13 +214,11 @@
 				//优惠券
 				var ticketId=$("#ticketId").html();
 				if(ticketId) ticketId=10;//暂时写死
-				//裂变红包id
-				var morepass=$("#moremoney").attr("morepass");
 				//留言
 				var remark=$("#remark").val();
 				
 				//发红包
-				sendRedPacket(price,count,taketype,score,ticketId,remark,morepass);
+				sendRedPacket(price,count,taketype,score,ticketId,remark,profit,maxprofit);
 			})
 		});
 		
@@ -213,24 +228,29 @@
 			$(".delticket").show(true);
 		}
 		
-		/*添加裂变红包*/
-		function morebagCallBack(pass,money,count){
-			$("#moremoney").attr("morepass",pass).html(money+"元/"+count+"个");
-		}
-		
 		/*发红包*/
-		function sendRedPacket(price,count,taketype,score,ticketId,remark,morepass){
-			var param={"money":price, "count":count, "taketype":taketype, "score":score, "ticketId":ticketId, "remark":remark, "morepass":morepass};
+		function sendRedPacket(price,count,taketype,score,ticketId,remark,profit,maxprofit){
+			var param={"money":price, "count":count, "taketype":taketype, "score":score, "ticketId":ticketId, "remark":remark, "profit":profit, "maxprofit":maxprofit};
 			ajaxData(Host+"All?SL=RedPacket&SLM=create", function(data) {
 				//成功
 				mui.toast("发送成功");
 				//红包id
-				if(data&&data.pass){
-					//跳转红包详情
-					openWindow("../main/redbag-detail.html","红包详情",{"pass":data.pass},true);
+				var self=plus.webview.currentWebview();
+				var morebagCallBack=self.morebagCallBack;
+				if (morebagCallBack) {
+					//如果要回调
+					if(data&&data.pass){
+						self.opener().evalJS('morebagCallBack("'+data.pass+'",'+price+','+count+')');
+					}
+					mui.back();
 				} else{
-					//跳转红包列表
-					openWindow("../main/redbag-list.html","红包列表",null,true);
+					if(data&&data.pass){
+						//跳转红包详情
+						openWindow("../main/redbag-detail.html","红包详情",{"pass":data.pass},true);
+					} else{
+						//跳转红包列表
+						openWindow("../main/redbag-list.html","红包列表",null,true);
+					}
 				}
 			},param);
 		}
