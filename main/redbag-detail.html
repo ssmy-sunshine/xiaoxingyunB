@@ -44,9 +44,8 @@
 				box-shadow: 1px 1px 10px black;
 			}
 			.redbag-info li{
-				font-size: 14px;
 				padding: 6px 12px;
-				text-align: left;
+				text-align: center;
 			}
 			/*领取明细*/
 			.takeline{
@@ -120,10 +119,9 @@
 				<p class="printer">打印红包二维码</p>
 			</div>
 			<ul class="redbag-info">
-				<li><span>红包金额:</span> <span class="totalmoney pink"></span></li>
-				<li><span>红包个数:</span> <span class="count pink"></span></li>
-				<li><span>送积分:</span> <span id="score" class="pink"></span></li>
-				<li><span>送优惠券:</span> <span id="ticketId" class="pink"></span></li>
+				<li><span>红包金额:</span> <span class="totalmoney pink monery"></span> &nbsp; &nbsp; <span>红包个数:</span> <span class="count pink"></span></li>
+				<li><span>送积分:</span> <span id="score" class="pink"></span> &nbsp; &nbsp; <span>送优惠券:</span> <span id="ticketId" class="pink"></span></li>
+				<li id="profitwarp" class="hide"><span>奖励邀请人:</span> <span id="profit" class="pink"></span> &nbsp; &nbsp; <span>最多奖励:</span> <span id="maxprofit" class="pink"></span></li>
 				<li><span>留言:</span> <span id="remark"></span></li>
 				<li><span>时间:</span> <span id="createtime"></span></li>
 			</ul>
@@ -134,7 +132,7 @@
 				<!--<li>
 					<img class="takeicon" src="../img/logo.png"/>
 					<span class="takename">昵称</span>
-					<span class="takemoney">0.01</span>
+					<span class="takemoney monery">0.01</span>
 					<span class="taketime">2017-4-15 15:19:44</span>
 				</li>-->
 			</ul>
@@ -150,10 +148,17 @@
 		mui.init();
 		mui.plusReady(function() {
 			//口令
-			var pass=plus.webview.currentWebview().pass;
+			var self=plus.webview.currentWebview();
+			var pass=self.pass;
+			var bagType=self.bagType;
 			//生成二维码图片
 			var qrDom=document.getElementById("qrcode");
-			var takeUrl=Host+"wxweb/main/takebag.html?pass="+pass;
+			var takeUrl;
+			if (bagType=="裂变红包") {
+				takeUrl=Host+"wxweb/main/invitebag.html?pass="+pass;
+			} else{
+				takeUrl=Host+"wxweb/main/takebag.html?pass="+pass;
+			}
 			new QRCode(qrDom, {text: takeUrl, width: 160, height: 160});
 			//查询红包明细
 			getRedbagDetail(pass);
@@ -176,6 +181,11 @@
 				$("#ticketId").html(data.ticketId);
 				$("#remark").html(data.remark);
 				$("#createtime").html(data.createtime);
+				if(data.profit>0&&!data.morepass){
+					$("#profit").html(data.profit.toFixed(2)+"元");
+					$("#maxprofit").html(data.maxprofit.toFixed(2)+"元");
+					$("#profitwarp").show();
+				}
 			},param);
 		}
 		
@@ -196,7 +206,7 @@
 						str+='<li>';
 						str+='<img class="takeicon" src="../img/logo.png" data-src="'+getImgpath(detail.usericon)+'" onload="loadimg(this)"/>';
 						str+='<span class="takename">'+(detail.takeuser.substr(0,3)+"**"+detail.takeuser.substr(detail.takeuser.length-3,3))+'</span>';
-						str+='<span class="takemoney">'+detail.money.toFixed(2)+'</span>';
+						str+='<span class="takemoney monery">'+detail.money.toFixed(2)+'</span>';
 						str+='<span class="taketime">'+detail.taketime+'</span>';
 						str+='</li>';
 					}

@@ -122,11 +122,13 @@
 				listDom.appendChild(liDom);
 				//存入变量到li
 				liDom.setAttribute("pass",liData.pass);
+				liDom.setAttribute("bagType",liData.bagType);
 				//li的点击事件
 				liDom.addEventListener("tap",function() {
 					var pass=this.getAttribute("pass");
+					var bagType=this.getAttribute("bagType");
 					//跳转红包详情
-					openWindow("../main/redbag-detail.html","红包详情",{"pass":pass});
+					openWindow("../main/redbag-detail.html","红包详情",{"pass":pass,"bagType":bagType});
 				})
 			}
 		}
