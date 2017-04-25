@@ -232,15 +232,13 @@
 		function sendRedPacket(price,count,taketype,score,ticketId,remark,profit,maxprofit){
 			var param={"money":price, "count":count, "taketype":taketype, "score":score, "ticketId":ticketId, "remark":remark, "profit":profit, "maxprofit":maxprofit};
 			ajaxData(Host+"All?SL=RedPacket&SLM=create", function(data) {
-				//成功
-				mui.toast("发送成功");
-				//红包id
+				//data={"pass":385809}
 				var self=plus.webview.currentWebview();
 				var morebagCallBack=self.morebagCallBack;
 				if (morebagCallBack) {
 					//如果要回调
 					if(data&&data.pass){
-						self.opener().evalJS('morebagCallBack("'+data.pass+'",'+price+','+count+')');
+						self.opener().evalJS('morebagCallBack('+data.pass+','+price+','+count+','+profit+','+maxprofit+')');
 					}
 					mui.back();
 				} else{

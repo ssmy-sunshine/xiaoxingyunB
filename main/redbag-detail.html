@@ -169,6 +169,7 @@
 		function getRedbagDetail(pass){
 			var param={"pass":pass};
 			ajaxData(Host+"All?SL=RedPacket&SLM=getdetail", function(data) {
+				//{"id":30,"pass":346166,"money":100.0,"count":5,"busid":11757,"remark":"欢迎您的下次光临~","score":5,"ticketId":10,"taketype":0,"taketypetip":"拼手气","createtime":"2017-04-25 16:19:44","profit":0.0,"maxprofit":0.0,"morepass":385809}
 				$(".totalmoney").html(data.money.toFixed(2));
 				$(".count").html(data.count);
 				$("#score").html(data.score);

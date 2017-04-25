@@ -115,7 +115,7 @@
 				<p class="input-right iconfont icon-youjiantou"></p>
 				<p class="delticket input-right iconfont icon-guanbi hide"></p>
 			</div>
-			<div class="input-warp tohref" href="../main/morebag-send.html?morebagCallBack=true" title="裂变红包">
+			<div id="toMoreBag" class="input-warp">
 				<p class="input-left">添加裂变红包</p>
 				<p id="moremoney" class="moremoney input-center"></p>
 				<p class="input-right iconfont icon-youjiantou"></p>
@@ -161,6 +161,8 @@
 				$("#ticketId").html("");
 				$(this).hide();
 			})
+			//裂变红包
+			$("#toMoreBag").href("../main/morebag-send.html","裂变红包",{morebagCallBack:true});
 			//发红包
 			$(".btn-send").click(function(){
 				//验证金额
@@ -198,12 +200,15 @@
 				var ticketId=$("#ticketId").html();
 				if(ticketId) ticketId=10;//暂时写死
 				//裂变红包id
-				var morepass=$("#moremoney").attr("morepass");
+				var $moremoney=$("#moremoney");
+				var morepass=$moremoney.attr("morepass");
+				var profit=$moremoney.attr("profit")||0;
+				var maxprofit=$moremoney.attr("maxprofit")||0;
 				//留言
 				var remark=$("#remark").val();
 				
 				//发红包
-				sendRedPacket(price,count,taketype,score,ticketId,remark,morepass);
+				sendRedPacket(price,count,taketype,score,ticketId,remark,morepass,profit,maxprofit);
 			})
 		});
 		
@@ -214,15 +219,15 @@
 		}
 		
 		/*添加裂变红包*/
-		function morebagCallBack(pass,money,count){
-			$("#moremoney").attr("morepass",pass).html(money+"元/"+count+"个");
+		function morebagCallBack(pass,money,count,profit,maxprofit){
+			$("#moremoney").html(money+"元/"+count+"个").attr("morepass",pass).attr("profit",profit).attr("maxprofit",maxprofit);
 		}
 		
 		/*发红包*/
-		function sendRedPacket(price,count,taketype,score,ticketId,remark,morepass){
-			var param={"money":price, "count":count, "taketype":taketype, "score":score, "ticketId":ticketId, "remark":remark, "morepass":morepass};
+		function sendRedPacket(price,count,taketype,score,ticketId,remark,morepass,profit,maxprofit){
+			var param={"money":price, "count":count, "taketype":taketype, "score":score, "ticketId":ticketId, "remark":remark, "morepass":morepass, "profit":profit, "maxprofit":maxprofit};
 			ajaxData(Host+"All?SL=RedPacket&SLM=create", function(data) {
-				//成功
+				//成功 data={"pass":346166}
 				mui.toast("发送成功");
 				//红包id
 				if(data&&data.pass){
